@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>t. rekkaro - time</title>
+    <!-- Load Tailwind CSS for minimalist styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font and basic layout consistency */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        /* Style for the fixed left menu */
+        #sidebar {
+            width: 18rem; /* Wide enough for text */
+            min-height: 100vh;
+            /* REMOVED: border-right to eliminate vertical line */
+            position: sticky;
+            top: 0;
+        }
+        /* Style the main content area for maximum white space */
+        #content-area {
+            max-width: 1000px;
+            padding: 3rem 6rem; /* Increased padding for more white space */
+        }
+        /* Ensure the timer text is clean and monospace-like, increased size */
+        #time-display {
+            font-size: 1rem; /* Larger font size */
+            letter-spacing: 0.1em;
+            font-weight: 50;
+            white-space: nowrap;
+        }
+        .nav-link {
+            transition: all 0.15s;
+            cursor: pointer;
+            padding: 0.25rem 0;
+            text-transform: lowercase; /* All main menu text is lowercase */
+        }
+        .nav-link.active {
+            font-weight: 600;
+        }
+        .project-list-item {
+            cursor: pointer;
+            padding: 0.1rem 0;
+        }
+        /* Hide content initially */
+        .content-section {
+            display: none;
+        }
+    </style>
+</head>
+<body class="flex">
+
+    <!-- Left Navigation Menu -->
+    <div id="sidebar" class="bg-white p-8">
+        <h1 class="text-xl font-bold mb-8 lowercase">taavi rekkaro</h1>
+        <nav>
+            
+            <!-- PROJECTS: Collapsible Group -->
+            <div id="nav-projects" class="nav-link text-gray-900 active" onclick="toggleProjects(); showContent('projects');">
+                projects
+            </div>
+            
+            <ul id="projects-list" class="mt-2 pl-4 text-sm space-y-1 overflow-hidden transition-all duration-300" style="max-height: 500px;">
+                <!-- Project item (now clickable to trigger content display) -->
+                <li><a class="project-list-item text-gray-900 hover:underline" onclick="showProject('time-project')">time</a></li>
+            </ul>
+
+            <!-- ABOUT link -->
+            <div id="nav-about" class="nav-link text-gray-500 mt-4" onclick="showContent('about')">
+                about
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="content-area" class="flex-grow">
+        
+        <!-- 1. The 'time' Project Content (Default landing page) -->
+        <div id="time-project-content" class="content-section">
+            <h2 class="text-5xl font-light mb-16 lowercase">time</h2>
+
+            <!-- The Running Counter - ONLY THE COUNTER REMAINS -->
+            <div id="time-display" class="font-mono">
+                --:--:--.--
+            </div>
+        </div>
+
+        <!-- 2. The 'Projects' Landing/Default Content (Just hides/shows projects-list) -->
+        <div id="projects-content" class="content-section">
+            <!-- This section exists mainly to manage the navigation state -->
+        </div>
+
+        <!-- 3. The 'About' Content (Hidden by default) -->
+        <div id="about-content" class="content-section">
+            <h2 class="text-5xl font-light mb-12 lowercase">about</h2>
+            <div class="max-w-2xl space-y-4 text-gray-700">
+                <p>taavi rekkaro is a multidisciplinary artist working across installation and conceptual media. the practice is driven by an interest in systems, duration, and the subtle shifts in perceived reality.</p>
+                <p>born in tallinn, estonia. currently based in the world.</p>
+                <p class="pt-4 text-sm text-black">
+                    <a href="mailto:your.email@example.com" class="hover:underline">your.email@example.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        
+        // Maps navigation IDs to content IDs
+        const NAV_TO_CONTENT_MAP = {
+            'projects': 'time-project-content', // Default project view
+            'about': 'about-content'
+        };
+
+        // Function to handle main navigation links (Projects/About)
+        function showContent(navId) {
+            // Hide all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Set navigation link status
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active', 'text-gray-900');
+                link.classList.add('text-gray-500');
+            });
+
+            const activeNav = document.getElementById(`nav-${navId}`);
+            if (activeNav) {
+                activeNav.classList.add('active', 'text-gray-900');
+                activeNav.classList.remove('text-gray-500');
+            }
+            
+            // Show the corresponding content. If 'projects' is clicked, we default to the first project content.
+            const contentId = (navId === 'projects') ? 'time-project-content' : navId + '-content';
+            const contentSection = document.getElementById(contentId);
+            if (contentSection) {
+                contentSection.style.display = 'block';
+            }
+        }
+
+        // Function to handle clicking an individual project link
+        function showProject(projectId) {
+            // Ensure main 'Projects' navigation state is correct
+            showContent('projects'); 
+            
+            // Hide all project content (in case multiple projects are added later)
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show the specific project content
+            const projectSection = document.getElementById(projectId + '-content');
+            if (projectSection) {
+                 projectSection.style.display = 'block';
+            }
+        }
+        
+        // Function to handle the collapsible projects menu
+        function toggleProjects() {
+            const projectsList = document.getElementById('projects-list');
+            const currentState = projectsList.style.maxHeight;
+
+            if (currentState === '0px' || !currentState) {
+                // Open the menu
+                projectsList.style.maxHeight = '500px'; 
+            } else {
+                // Close the menu
+                projectsList.style.maxHeight = '0px'; 
+            }
+        }
+
+
+        // --- Timer Logic (Unchanged for calculation, just placed here) ---
+        
+        // 1. Define the reference date (T_ref) and the accumulated duration (D_seed)
+        const REF_DATE_STRING = '2025-11-15T00:00:00+01:00';
+        const REF_MS = new Date(REF_DATE_STRING).getTime(); 
+
+        const SEED_HOURS_MS = 8212 * 3600 * 1000;
+        const SEED_MINUTES_MS = 18 * 60 * 1000;
+        const SEED_SECONDS_MS = 4860; // 4.86 seconds = 4860 milliseconds
+        
+        const SEED_DURATION_MS = SEED_HOURS_MS + SEED_MINUTES_MS + SEED_SECONDS_MS;
+
+        // 2. Calculate the Project Start Time (T_start) in milliseconds since Epoch
+        const START_TIME = REF_MS - SEED_DURATION_MS;
+
+        const timeDisplay = document.getElementById('time-display');
+
+        function updateTimer() {
+            const totalElapsedMs = Date.now() - START_TIME;
+            let totalSeconds = Math.floor(totalElapsedMs / 1000);
+            
+            const hours = Math.floor(totalSeconds / 3600);
+            
+            totalSeconds %= 3600;
+            const minutes = Math.floor(totalSeconds / 60);
+            
+            const seconds = totalSeconds % 60;
+            
+            const hundredths = Math.floor((totalElapsedMs % 1000) / 10); 
+
+            const formattedHours = String(hours).padStart(2, '0');
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(seconds).padStart(2, '0');
+            const formattedHundredths = String(hundredths).padStart(2, '0');
+
+            timeDisplay.textContent = 
+                `${formattedHours}:${formattedMinutes}:${formattedSeconds}.${formattedHundredths}`;
+        }
+
+        // Run immediately on load and then every 10 milliseconds
+        updateTimer();
+        setInterval(updateTimer, 10); 
+        
+        // Default View: Ensure the first project is shown on load
+        window.onload = function() {
+            // Initially hide the About content to ensure only one thing is visible
+            document.getElementById('about-content').style.display = 'none';
+
+            // Show the first project by default
+            showProject('time');
+        };
+
+    </script>
+</body>
+</html>
