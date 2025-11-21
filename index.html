@@ -104,10 +104,11 @@
         <h1 class="text-xl font-bold mb-8 lowercase">taavi rekkaro</h1>
         <nav>
             
-    
+            <!-- HOME link REMOVED FROM MENU -->
             
             <!-- PROJECTS: Collapsible Group -->
-            <div id="nav-projects" class="nav-link text-gray-900 mt-4" onclick="navigate('#time')">
+            <!-- We assume the Projects menu link should be the default active state -->
+            <div id="nav-projects" class="nav-link text-gray-900" onclick="navigate('#time')">
                 projects
             </div>
             
@@ -131,7 +132,7 @@
     <!-- Main Content Area -->
     <div id="content-area" class="flex-grow">
         
-        <!-- 0. HOME Content (New Empty Landing Page) -->
+        <!-- 0. HOME Content (New Empty Landing Page - Used as default) -->
         <div id="home-content" class="content-section">
             <!-- This page is intentionally empty for a clean landing -->
         </div>
@@ -200,7 +201,7 @@
         function renderContent() {
             let hash = window.location.hash.slice(1);
             
-            // 1. Default to 'home' if no hash is present
+            // 1. DEFAULT: If no hash is present, load the empty 'home' page.
             if (!hash) {
                 hash = 'home'; 
             }
@@ -220,17 +221,17 @@
             let contentId = hash + '-content';
             const contentSection = document.getElementById(contentId);
             
-            // Determine which top-level link is active
+            // Determine which top-level link should be active: Projects or About.
             let activeNavId;
             if (hash === 'time') {
                 activeNavId = 'projects';
-            } else if (hash === 'home' || hash === 'about') {
-                activeNavId = hash;
+            } else if (hash === 'about') {
+                activeNavId = 'about';
             } else {
-                activeNavId = 'home'; // Fallback if hash is invalid
+                activeNavId = null; // No navigation link is active if we are on 'home'
             }
 
-            const activeNav = document.getElementById(`nav-${activeNavId}`);
+            const activeNav = activeNavId ? document.getElementById(`nav-${activeNavId}`) : null;
 
             if (contentSection) {
                 contentSection.style.display = 'block';
