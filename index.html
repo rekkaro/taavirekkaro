@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>t. rekkaro - time</title>
-    <!-- Load Tailwind CSS for minimalist styling -->
+    <title>taavi rekkaro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom font and basic layout consistency */
@@ -15,36 +14,63 @@
         }
         /* Style for the fixed left menu */
         #sidebar {
-            width: 18rem; /* Wide enough for text */
+            width: 16rem; /* Slightly reduced width for more space */
             min-height: 100vh;
-            /* REMOVED: border-right to eliminate vertical line */
             position: sticky;
             top: 0;
+            z-index: 10;
         }
+        /* Mobile: Hide menu and show overlay settings */
+        @media (max-width: 768px) {
+            #sidebar {
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                left: -100%;
+                transition: left 0.3s ease-in-out;
+            }
+            #sidebar.open {
+                left: 0;
+            }
+        }
+
         /* Style the main content area for maximum white space */
         #content-area {
             max-width: 1000px;
-            padding: 3rem 6rem; /* Increased padding for more white space */
+            padding: 3rem 6rem;
         }
-        /* Ensure the timer text is clean and monospace-like, increased size */
+        /* Mobile: Adjust padding and max-width */
+        @media (max-width: 768px) {
+            #content-area {
+                padding: 1rem 1rem 3rem 1rem;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        
+        /* Ensure the timer text is clean and monospace-like */
         #time-display {
-            font-size: 1rem; /* Larger font size */
+            font-size: 3rem; /* Adjusted for desktop */
             letter-spacing: 0.1em;
-            font-weight: 50;
+            font-weight: 300;
             white-space: nowrap;
         }
-        .nav-link {
+        /* Mobile: Smaller font for the clock */
+        @media (max-width: 768px) {
+            #time-display {
+                font-size: 2rem;
+                overflow-x: scroll; /* Allow horizontal scroll if needed */
+            }
+        }
+
+        .nav-link, .project-list-item {
             transition: all 0.15s;
             cursor: pointer;
             padding: 0.25rem 0;
-            text-transform: lowercase; /* All main menu text is lowercase */
+            text-transform: lowercase; 
         }
         .nav-link.active {
             font-weight: 600;
-        }
-        .project-list-item {
-            cursor: pointer;
-            padding: 0.1rem 0;
         }
         /* Hide content initially */
         .content-section {
@@ -52,51 +78,44 @@
         }
     </style>
 </head>
-<body class="flex">
+<body class="flex md:flex-row flex-col">
 
-    <!-- Left Navigation Menu -->
-    <div id="sidebar" class="bg-white p-8">
+    <button id="menu-button" class="md:hidden fixed top-0 left-0 p-4 z-20 lowercase text-gray-900 font-bold" onclick="toggleMenu()">
+        menu
+    </button>
+    
+    <div id="sidebar" class="bg-white p-8 md:block border-r border-gray-100">
         <h1 class="text-xl font-bold mb-8 lowercase">taavi rekkaro</h1>
         <nav>
             
-            <!-- PROJECTS: Collapsible Group -->
-            <div id="nav-projects" class="nav-link text-gray-900 active" onclick="toggleProjects(); showContent('projects');">
+            <div id="nav-projects" class="nav-link text-gray-900 active" onclick="navigate('#time')">
                 projects
             </div>
             
-            <ul id="projects-list" class="mt-2 pl-4 text-sm space-y-1 overflow-hidden transition-all duration-300" style="max-height: 500px;">
-                <!-- Project item (now clickable to trigger content display) -->
-                <li><a class="project-list-item text-gray-900 hover:underline" onclick="showProject('time-project')">time</a></li>
+            <ul id="projects-list" class="mt-2 pl-4 text-sm space-y-1 transition-all duration-300">
+                <li><a class="project-list-item text-gray-900 hover:underline" onclick="navigate('#time')">time</a></li>
             </ul>
 
-            <!-- ABOUT link -->
-            <div id="nav-about" class="nav-link text-gray-500 mt-4" onclick="showContent('about')">
+            <div id="nav-about" class="nav-link text-gray-500 mt-4" onclick="navigate('#about')">
                 about
             </div>
         </nav>
+        <button class="md:hidden absolute top-4 right-4 text-xl font-bold" onclick="toggleMenu()">
+            &times;
+        </button>
     </div>
 
-    <!-- Main Content Area -->
     <div id="content-area" class="flex-grow">
         
-        <!-- 1. The 'time' Project Content (Default landing page) -->
-        <div id="time-project-content" class="content-section">
-            <h2 class="text-5xl font-light mb-16 lowercase">time</h2>
-
-            <!-- The Running Counter - ONLY THE COUNTER REMAINS -->
+        <div id="time-content" class="content-section">
+            <h2 class="text-3xl md:text-5xl font-light mb-16 lowercase">time</h2>
             <div id="time-display" class="font-mono">
                 --:--:--.--
             </div>
         </div>
 
-        <!-- 2. The 'Projects' Landing/Default Content (Just hides/shows projects-list) -->
-        <div id="projects-content" class="content-section">
-            <!-- This section exists mainly to manage the navigation state -->
-        </div>
-
-        <!-- 3. The 'About' Content (Hidden by default) -->
         <div id="about-content" class="content-section">
-            <h2 class="text-5xl font-light mb-12 lowercase">about</h2>
+            <h2 class="text-3xl md:text-5xl font-light mb-12 lowercase">about</h2>
             <div class="max-w-2xl space-y-4 text-gray-700">
                 <p>taavi rekkaro is a multidisciplinary artist working across installation and conceptual media. the practice is driven by an interest in systems, duration, and the subtle shifts in perceived reality.</p>
                 <p>born in tallinn, estonia. currently based in the world.</p>
@@ -108,101 +127,90 @@
     </div>
 
     <script>
-        // --- Navigation Logic ---
+        // --- Configuration ---
+        const BASE_TITLE = 'taavi rekkaro';
+        const SEED_HOURS_MS = 8212 * 3600 * 1000;
+        const SEED_MINUTES_MS = 18 * 60 * 1000;
+        const SEED_SECONDS_MS = 4860; 
+        const REF_DATE_STRING = '2025-11-15T00:00:00+01:00'; 
         
-        // Maps navigation IDs to content IDs
-        const NAV_TO_CONTENT_MAP = {
-            'projects': 'time-project-content', // Default project view
-            'about': 'about-content'
-        };
+        // --- Global State ---
+        const REF_MS = new Date(REF_DATE_STRING).getTime();
+        const SEED_DURATION_MS = SEED_HOURS_MS + SEED_MINUTES_MS + SEED_SECONDS_MS;
+        const START_TIME = REF_MS - SEED_DURATION_MS;
 
-        // Function to handle main navigation links (Projects/About)
-        function showContent(navId) {
+        // --- View Logic (Routing, Toggling, Display) ---
+
+        // Handles menu collapse on mobile
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Handles URL and navigation state
+        function navigate(hash) {
+            window.location.hash = hash;
+            // Close menu on mobile after selection
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+        }
+
+        // Core logic to show content based on URL hash
+        function renderContent() {
+            let hash = window.location.hash.slice(1);
+            if (!hash) {
+                hash = 'time'; // Default to #time if no hash is present
+            }
+
             // Hide all content sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.style.display = 'none';
             });
             
-            // Set navigation link status
+            // Remove active state from all links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active', 'text-gray-900');
                 link.classList.add('text-gray-500');
             });
 
+            // Set Title and Show Content
+            let contentId = hash + '-content';
+            const contentSection = document.getElementById(contentId);
+            const navId = (hash === 'time' || hash === 'time-project') ? 'projects' : hash;
             const activeNav = document.getElementById(`nav-${navId}`);
+
+            if (contentSection) {
+                contentSection.style.display = 'block';
+                document.title = (hash === 'time') ? `${BASE_TITLE} - time` : BASE_TITLE;
+            } else {
+                // Handle 404/Fallback (Optional: show a generic projects page)
+                document.getElementById('time-content').style.display = 'block';
+                document.title = BASE_TITLE;
+            }
+
+            // Set Navigation Active State
             if (activeNav) {
                 activeNav.classList.add('active', 'text-gray-900');
                 activeNav.classList.remove('text-gray-500');
             }
-            
-            // Show the corresponding content. If 'projects' is clicked, we default to the first project content.
-            const contentId = (navId === 'projects') ? 'time-project-content' : navId + '-content';
-            const contentSection = document.getElementById(contentId);
-            if (contentSection) {
-                contentSection.style.display = 'block';
-            }
-        }
-
-        // Function to handle clicking an individual project link
-        function showProject(projectId) {
-            // Ensure main 'Projects' navigation state is correct
-            showContent('projects'); 
-            
-            // Hide all project content (in case multiple projects are added later)
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.style.display = 'none';
-            });
-
-            // Show the specific project content
-            const projectSection = document.getElementById(projectId + '-content');
-            if (projectSection) {
-                 projectSection.style.display = 'block';
-            }
         }
         
-        // Function to handle the collapsible projects menu
-        function toggleProjects() {
-            const projectsList = document.getElementById('projects-list');
-            const currentState = projectsList.style.maxHeight;
-
-            if (currentState === '0px' || !currentState) {
-                // Open the menu
-                projectsList.style.maxHeight = '500px'; 
-            } else {
-                // Close the menu
-                projectsList.style.maxHeight = '0px'; 
-            }
-        }
-
-
-        // --- Timer Logic (Unchanged for calculation, just placed here) ---
-        
-        // 1. Define the reference date (T_ref) and the accumulated duration (D_seed)
-        const REF_DATE_STRING = '2025-11-15T00:00:00+01:00';
-        const REF_MS = new Date(REF_DATE_STRING).getTime(); 
-
-        const SEED_HOURS_MS = 8212 * 3600 * 1000;
-        const SEED_MINUTES_MS = 18 * 60 * 1000;
-        const SEED_SECONDS_MS = 4860; // 4.86 seconds = 4860 milliseconds
-        
-        const SEED_DURATION_MS = SEED_HOURS_MS + SEED_MINUTES_MS + SEED_SECONDS_MS;
-
-        // 2. Calculate the Project Start Time (T_start) in milliseconds since Epoch
-        const START_TIME = REF_MS - SEED_DURATION_MS;
-
+        // --- Timer Logic ---
         const timeDisplay = document.getElementById('time-display');
 
         function updateTimer() {
             const totalElapsedMs = Date.now() - START_TIME;
             let totalSeconds = Math.floor(totalElapsedMs / 1000);
             
+            // Hours (no limit, padding to 2 digits)
             const hours = Math.floor(totalSeconds / 3600);
-            
             totalSeconds %= 3600;
-            const minutes = Math.floor(totalSeconds / 60);
             
+            // Minutes and Seconds (padded to 2 digits)
+            const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
             
+            // Hundredths of a second (padded to 2 digits)
             const hundredths = Math.floor((totalElapsedMs % 1000) / 10); 
 
             const formattedHours = String(hours).padStart(2, '0');
@@ -214,19 +222,23 @@
                 `${formattedHours}:${formattedMinutes}:${formattedSeconds}.${formattedHundredths}`;
         }
 
-        // Run immediately on load and then every 10 milliseconds
-        updateTimer();
-        setInterval(updateTimer, 10); 
-        
-        // Default View: Ensure the first project is shown on load
+        // --- Initialization ---
+
+        // Listen for URL hash changes (e.g., when clicking links or using the back button)
+        window.addEventListener('hashchange', renderContent);
+
+        // Run immediately to display content on page load
         window.onload = function() {
-            // Initially hide the About content to ensure only one thing is visible
-            document.getElementById('about-content').style.display = 'none';
-
-            // Show the first project by default
-            showProject('time');
+            renderContent();
+            updateTimer();
+            // Start the timer loop
+            setInterval(updateTimer, 10);
         };
-
     </script>
 </body>
 </html>
+```eof
+
+This final version is mobile-responsive and uses a clean **hash-based URL** system, meaning you can now share direct links like `https://taavirekkaro.com/#time` and `https://taavirekkaro.com/#about`.
+
+Ready to upload this to your GitHub repository!
