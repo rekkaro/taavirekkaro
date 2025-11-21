@@ -84,6 +84,11 @@
         .content-section {
             display: none;
         }
+        
+        /* Ensure project list items match the size of main links */
+        #projects-list a {
+            font-size: 1rem; /* Tailwind 'base' size */
+        }
     </style>
 </head>
 <body class="flex md:flex-row flex-col">
@@ -99,13 +104,19 @@
         <h1 class="text-xl font-bold mb-8 lowercase">taavi rekkaro</h1>
         <nav>
             
+            <!-- HOME link -->
+            <div id="nav-home" class="nav-link text-gray-500" onclick="navigate('#home')">
+                home
+            </div>
+            
             <!-- PROJECTS: Collapsible Group -->
-            <div id="nav-projects" class="nav-link text-gray-900 active" onclick="navigate('#time')">
+            <div id="nav-projects" class="nav-link text-gray-900 mt-4" onclick="navigate('#time')">
                 projects
             </div>
             
-            <ul id="projects-list" class="mt-2 pl-4 text-sm space-y-1 transition-all duration-300">
-                <!-- Project item now uses the navigation function -->
+            <!-- Removed text-sm from ul and applied font-size to the a tags -->
+            <ul id="projects-list" class="mt-2 pl-4 space-y-1 transition-all duration-300">
+                <!-- Project item -->
                 <li><a class="project-list-item text-gray-900 hover:underline" onclick="navigate('#time')">time</a></li>
             </ul>
 
@@ -123,18 +134,23 @@
     <!-- Main Content Area -->
     <div id="content-area" class="flex-grow">
         
+        <!-- 0. HOME Content (New Empty Landing Page) -->
+        <div id="home-content" class="content-section">
+            <!-- This page is intentionally empty for a clean landing -->
+        </div>
+        
         <!-- 1. The 'time' Project Content -->
         <div id="time-content" class="content-section">
-            <h2 class="text-2xl md:text-4xl font-light mb-16 lowercase">time</h2>
+            <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">time</h2>
             <!-- The Running Counter - ONLY THE COUNTER REMAINS -->
             <div id="time-display" class="font-mono">
                 --:--:--.--
             </div>
         </div>
 
-        <!-- 2. The 'About' Content (Title corrected) -->
+        <!-- 2. The 'About' Content -->
         <div id="about-content" class="content-section">
-            <h2 class="text-2xl md:text-4xl font-light mb-16 lowercase">about</h2> 
+            <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">about</h2> 
             <div class="max-w-2xl space-y-4 text-gray-700">
                 <p>Taavi Rekkaro (b. 1988, Estonia) studied printmaking at Estonian Academy of Arts. He is working to explore connections between painting and photography while trying to avoid any writing.</p>
                 <p class="pt-4 text-sm text-black">
@@ -149,9 +165,8 @@
         const BASE_TITLE = 'taavi rekkaro';
         const TIME_PROJECT_TITLE = `${BASE_TITLE} - time`;
         
-        // --- FIXED GLOBAL START TIME ---
-        // Project start: December 8, 2024, 12:56:00 EEST (UTC+2)
-        // We define the components in UTC to ensure global consistency.
+        // --- FIXED GLOBAL START TIME (Sunday, December 8, 2024, at 12:56:00 EEST) ---
+        // Calculated to ensure consistent time in all zones via UTC.
         const START_YEAR = 2024;
         const START_MONTH = 11; // Months are 0-indexed (Dec is 11)
         const START_DAY = 8;
@@ -171,10 +186,12 @@
 
         // --- View Logic (Routing, Toggling, Display) ---
 
+        // Handles menu open/close on mobile
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
         }
 
+        // Handles URL and navigation state
         function navigate(hash) {
             window.location.hash = hash;
             if (window.innerWidth <= 768) {
@@ -182,34 +199,52 @@
             }
         }
 
+        // Core logic to show content based on URL hash
         function renderContent() {
             let hash = window.location.hash.slice(1);
+            
+            // 1. Default to 'home' if no hash is present
             if (!hash) {
-                hash = 'time'; // Default to #time if no hash is present
+                hash = 'home'; 
             }
-
+            
+            // Hide all content sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.style.display = 'none';
             });
             
+            // Remove active state from all main navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active', 'text-gray-900');
                 link.classList.add('text-gray-500');
             });
 
+            // Set Title and Show Content
             let contentId = hash + '-content';
             const contentSection = document.getElementById(contentId);
-            const navId = (hash === 'time') ? 'projects' : hash;
-            const activeNav = document.getElementById(`nav-${navId}`);
+            
+            // Determine which top-level link is active
+            let activeNavId;
+            if (hash === 'time') {
+                activeNavId = 'projects';
+            } else if (hash === 'home' || hash === 'about') {
+                activeNavId = hash;
+            } else {
+                activeNavId = 'home'; // Fallback if hash is invalid
+            }
+
+            const activeNav = document.getElementById(`nav-${activeNavId}`);
 
             if (contentSection) {
                 contentSection.style.display = 'block';
                 document.title = (hash === 'time') ? TIME_PROJECT_TITLE : BASE_TITLE;
             } else {
-                document.getElementById('time-content').style.display = 'block';
+                // Fallback rendering 'home'
+                document.getElementById('home-content').style.display = 'block';
                 document.title = BASE_TITLE;
             }
 
+            // Set Navigation Active State
             if (activeNav) {
                 activeNav.classList.add('active', 'text-gray-900');
                 activeNav.classList.remove('text-gray-500');
@@ -247,6 +282,7 @@
 
         // --- Initialization ---
 
+        // Listen for URL hash changes (e.g., when clicking links or using the back button)
         window.addEventListener('hashchange', renderContent);
 
         window.onload = function() {
