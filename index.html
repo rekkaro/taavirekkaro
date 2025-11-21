@@ -12,6 +12,13 @@
             background-color: #ffffff;
             color: #000000;
         }
+        /* Mobile: Add padding to the top of the body to clear the fixed menu button */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 3rem; /* Pushes content down below the fixed 'menu' button */
+            }
+        }
+
         /* Style for the fixed left menu */
         #sidebar {
             width: 16rem; /* Slightly reduced width for more space */
@@ -42,7 +49,8 @@
         /* Mobile: Adjust padding and max-width */
         @media (max-width: 768px) {
             #content-area {
-                padding: 1rem 1rem 3rem 1rem;
+                /* Reduced vertical padding here since padding is now on the body */
+                padding: 0 1rem 3rem 1rem; 
                 width: 100%;
                 max-width: 100%;
             }
@@ -80,42 +88,53 @@
 </head>
 <body class="flex md:flex-row flex-col">
 
+    <!-- Mobile Menu Button (Visible only on small screens) -->
+    <!-- Increased Z-index to ensure it sits above content -->
     <button id="menu-button" class="md:hidden fixed top-0 left-0 p-4 z-20 lowercase text-gray-900 font-bold" onclick="toggleMenu()">
         menu
     </button>
     
+    <!-- Left Navigation Menu -->
     <div id="sidebar" class="bg-white p-8 md:block border-r border-gray-100">
         <h1 class="text-xl font-bold mb-8 lowercase">taavi rekkaro</h1>
         <nav>
             
+            <!-- PROJECTS: Collapsible Group -->
             <div id="nav-projects" class="nav-link text-gray-900 active" onclick="navigate('#time')">
                 projects
             </div>
             
             <ul id="projects-list" class="mt-2 pl-4 text-sm space-y-1 transition-all duration-300">
+                <!-- Project item now uses the navigation function -->
                 <li><a class="project-list-item text-gray-900 hover:underline" onclick="navigate('#time')">time</a></li>
             </ul>
 
+            <!-- ABOUT link -->
             <div id="nav-about" class="nav-link text-gray-500 mt-4" onclick="navigate('#about')">
                 about
             </div>
         </nav>
+        <!-- Close button for mobile menu -->
         <button class="md:hidden absolute top-4 right-4 text-xl font-bold" onclick="toggleMenu()">
             &times;
         </button>
     </div>
 
+    <!-- Main Content Area -->
     <div id="content-area" class="flex-grow">
         
+        <!-- 1. The 'time' Project Content -->
         <div id="time-content" class="content-section">
-            <h2 class="text-1xl md:text-3xl font-light mb-16 lowercase">time</h2>
+            <h2 class="text-2xl md:text-4xl font-light mb-16 lowercase">time</h2>
+            <!-- The Running Counter - ONLY THE COUNTER REMAINS -->
             <div id="time-display" class="font-mono">
                 --:--:--.--
             </div>
         </div>
 
+        <!-- 2. The 'About' Content (Title corrected) -->
         <div id="about-content" class="content-section">
-            <h2 class="text-1xl md:text-3xl font-light mb-16 lowercase">time</h2>
+            <h2 class="text-2xl md:text-4xl font-light mb-16 lowercase">about</h2> 
             <div class="max-w-2xl space-y-4 text-gray-700">
                 <p>Taavi Rekkaro (b. 1988, Estonia) studied printmaking at Estonian Academy of Arts. He is working to explore connections between painting and photography while trying to avoid any writing.</p>
                 <p class="pt-4 text-sm text-black">
@@ -128,6 +147,7 @@
     <script>
         // --- Configuration ---
         const BASE_TITLE = 'taavi rekkaro';
+        const TIME_PROJECT_TITLE = `${BASE_TITLE} - time`;
         const SEED_HOURS_MS = 8212 * 3600 * 1000;
         const SEED_MINUTES_MS = 18 * 60 * 1000;
         const SEED_SECONDS_MS = 4860; 
@@ -175,14 +195,14 @@
             // Set Title and Show Content
             let contentId = hash + '-content';
             const contentSection = document.getElementById(contentId);
-            const navId = (hash === 'time' || hash === 'time-project') ? 'projects' : hash;
+            const navId = (hash === 'time') ? 'projects' : hash;
             const activeNav = document.getElementById(`nav-${navId}`);
 
             if (contentSection) {
                 contentSection.style.display = 'block';
-                document.title = (hash === 'time') ? `${BASE_TITLE} - time` : BASE_TITLE;
+                document.title = (hash === 'time') ? TIME_PROJECT_TITLE : BASE_TITLE;
             } else {
-                // Handle 404/Fallback (Optional: show a generic projects page)
+                // Handle 404/Fallback
                 document.getElementById('time-content').style.display = 'block';
                 document.title = BASE_TITLE;
             }
