@@ -35,11 +35,11 @@
         }
 
         #content-area {
-            max-width: 1200px; /* Wider to accommodate PDF better */
+            max-width: 1200px; 
             padding: 3rem 6rem;
         }
         @media (max-width: 768px) {
-            #content-area { padding: 0 1rem 3rem 1rem; width: 100%; max-width: 100%; }
+            #content-area { padding: 1.5rem 1rem 3rem 1rem; width: 100%; max-width: 100%; }
         }
         
         #time-display {
@@ -56,19 +56,44 @@
             text-transform: lowercase; 
         }
         
-        /* Active links change color but stay light weight */
         .nav-link.active, .project-list-item.active {
             color: #000000 !important;
         }
         
         .content-section { display: none; }
         
-        /* PDF Viewer Container */
+        /* Improved PDF Viewer Container for Mobile */
+        .pdf-wrapper {
+            width: 100%;
+            height: 75vh;
+            margin-top: 1.5rem;
+            border: 1px solid #f3f4f6;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Essential for iOS scrolling */
+        }
+
         .pdf-container {
             width: 100%;
-            height: 80vh; /* Takes up most of the viewport height */
+            height: 100%;
             border: none;
-            margin-top: 2rem;
+            display: block;
+        }
+
+        /* Mobile fallback button style */
+        .mobile-pdf-link {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .mobile-pdf-link {
+                display: inline-block;
+                margin-bottom: 1rem;
+                font-size: 0.875rem;
+                text-decoration: underline;
+                color: #666;
+            }
+            .pdf-wrapper {
+                height: 60vh; /* Shorter on mobile to prevent layout issues */
+            }
         }
     </style>
 </head>
@@ -81,7 +106,7 @@
     <div id="sidebar" class="bg-white p-8 md:block border-r border-gray-100">
         <h1 class="text-xl font-bold mb-8 lowercase">taavi rekkaro</h1>
         <nav>
-            <div id="nav-projects" class="nav-link text-gray-900" onclick="navigate('#time')">
+            <div id="nav-projects" class="nav-link text-gray-500" onclick="navigate('#time')">
                 projects
             </div>
             
@@ -115,10 +140,13 @@
             <div id="time-display" class="font-mono">--:--:--.--</div>
         </div>
 
-        <!-- Universal PDF Section -->
+        <!-- Universal PDF Section with Mobile Fallback -->
         <div id="pdf-content" class="content-section">
             <h2 id="pdf-title" class="text-2xl md:text-3xl font-light mb-8 lowercase">project</h2>
-            <iframe id="pdf-viewer" class="pdf-container" src=""></iframe>
+            <a id="mobile-pdf-btn" href="#" target="_blank" class="mobile-pdf-link lowercase italic">open pdf full screen</a>
+            <div class="pdf-wrapper">
+                <iframe id="pdf-viewer" class="pdf-container" src=""></iframe>
+            </div>
         </div>
 
         <div id="installations-content" class="content-section">
@@ -141,12 +169,11 @@
         const BASE_TITLE = 'taavi rekkaro';
         const START_TIME = Date.UTC(2024, 11, 8, 10, 56, 0);
 
-        // Map hashes to PDF filenames in your GitHub repository
         const pdfMap = {
-            'losing-tomorrow': { title: 'losing tomorrow 2024', file: 'losing-tomorrow.pdf' },
-            'all-a-day': { title: "it's all a day - 2025", file: 'all-a-day.pdf' },
-            'silent-scream': { title: 'silent scream - 2025', file: 'silent-scream.pdf' },
-            'thanks': { title: 'thanks for everything', file: 'thanks.pdf' }
+            'losing-tomorrow': { title: 'losing tomorrow 2024', file: 'losing-tomorrow.pdf', linkId: 'link-losing' },
+            'all-a-day': { title: "it's all a day - 2025", file: 'all-a-day.pdf', linkId: 'link-allday' },
+            'silent-scream': { title: 'silent scream - 2025', file: 'silent-scream.pdf', linkId: 'link-silent' },
+            'thanks': { title: 'thanks for everything', file: 'thanks.pdf', linkId: 'link-thanks' }
         };
 
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
@@ -157,7 +184,7 @@
         }
 
         function renderContent() {
-            let hash = window.location.hash.slice(1) || 'home';
+            const hash = window.location.hash.slice(1) || 'home';
             
             document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
             document.querySelectorAll('.nav-link, .project-list-item').forEach(l => {
@@ -166,32 +193,30 @@
             });
 
             const pdfData = pdfMap[hash];
+            
             if (pdfData) {
                 const pdfSection = document.getElementById('pdf-content');
                 document.getElementById('pdf-title').textContent = pdfData.title;
                 document.getElementById('pdf-viewer').src = pdfData.file;
+                document.getElementById('mobile-pdf-btn').href = pdfData.file;
                 pdfSection.style.display = 'block';
                 document.title = `${BASE_TITLE} - ${pdfData.title}`;
                 
-                // Keep 'projects' header black, and specific link black
                 document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
-                // Construct ID based on mapping
-                const linkId = 'link-' + hash.split('-')[0];
-                const linkElem = document.getElementById(linkId);
+                const linkElem = document.getElementById(pdfData.linkId);
                 if(linkElem) linkElem.classList.add('active');
                 
             } else {
                 const contentSection = document.getElementById(hash + '-content');
                 if (contentSection) contentSection.style.display = 'block';
-                
                 document.title = (hash === 'time') ? `${BASE_TITLE} - time` : BASE_TITLE;
                 
-                // Manage active navigation states
                 if (hash === 'time') {
                     document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
                     document.getElementById('link-time').classList.add('active');
                 } else if (hash === 'about' || hash === 'installations') {
-                    document.getElementById('nav-' + hash).classList.add('active', 'text-gray-900');
+                    const navElem = document.getElementById('nav-' + hash);
+                    if(navElem) navElem.classList.add('active', 'text-gray-900');
                 }
             }
         }
