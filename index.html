@@ -106,6 +106,26 @@
                 height: 50vh; 
             }
         }
+
+        /* Custom minimal white/light scrollbars for WebKit & Firefox */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ffffff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f3f4f6;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e5e7eb;
+        }
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #f3f4f6 #ffffff;
+        }
     </style>
 </head>
 <body class="flex md:flex-row flex-col">
@@ -203,6 +223,15 @@
                 <img src="i%20would%20never/2026_VS_Taavi_WebRes_8.jpg" alt="i would never remember 2026 - 8" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
                 <img src="i%20would%20never/2026_VS_Taavi_WebRes_9.jpg" alt="i would never remember 2026 - 9" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
                 <img src="i%20would%20never/2026_VS_Taavi_WebRes_10.jpg" alt="i would never remember 2026 - 10" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+            </div>
+
+            <!-- Full Exhibition Text Below Photos -->
+            <div class="mt-12 pt-6 max-w-xl text-sm text-gray-700 leading-relaxed font-light space-y-4 lowercase border-t border-gray-100 pb-16">
+                <p>in may of 2026, rasmus, tor and taavi went to visit the photo london art fair. the title of this show is from one of those mornings: taavi read out a memory from the previous night, where his good friend tor tried to get to the root of their cause.</p>
+                <p class="pl-4 italic text-black font-normal">“we like to be like sad jazz<br>we want to be like sad jazz”</p>
+                <p>without writing down, this or these moments would just be lived but forgotten. (it’s also fun to see tor reacting to his past thoughts.</p>
+                <p>for taavi, catching moments is sacred. how can you be sure you even were there - did these moments truly exist? what have you lost if they get mangled up or simply forgotten?</p>
+                <p>in his process taavi is trying to catch fleeting moments like these - whether they come in the shape of photos, quotes, texts, paintings, sculptures or pieces of tape. presented in vasli souza, båstad, is a similar dissolving snapshot of taavi’s ongoing project, consisting of photos and sculptures starting from 2023. captured moments of good friends, places full of emotions and just trying to feel alive or just a bit happy.</p>
             </div>
         </div>
 
