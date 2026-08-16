@@ -86,7 +86,15 @@
             display: none;
         }
         
+        /* Gallery Image Sizing for Desktop and Mobile */
+        .gallery-img {
+            height: calc(100vh - 16.5rem);
+            min-height: 250px;
+        }
         @media (max-width: 768px) {
+            .gallery-img {
+                height: 50vh;
+            }
             .mobile-pdf-link {
                 display: inline-block;
                 margin-bottom: 1rem;
@@ -145,11 +153,10 @@
             <div id="time-display" class="font-mono">--:--:--.--</div>
         </div>
 
-        <!-- Universal PDF Section with Mobile Text Link -->
+        <!-- Universal PDF Section -->
         <div id="pdf-content" class="content-section">
             <h2 id="pdf-title" class="text-2xl md:text-3xl font-light mb-4 lowercase">project</h2>
             
-            <!-- Minimalist Mobile Text Link -->
             <a id="mobile-pdf-btn" href="#" target="_blank" class="mobile-pdf-link lowercase">view full pdf</a>
             
             <div class="pdf-wrapper">
@@ -157,6 +164,7 @@
             </div>
         </div>
 
+        <!-- Exhibitions overview page -->
         <div id="exhibitions-content" class="content-section">
             <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">exhibitions</h2>
             <div class="text-gray-700 text-sm lowercase">
@@ -164,7 +172,6 @@
             </div>
         </div>
 
-        <!-- Exhibition Gallery: i would never remember 2026 -->
         <div id="i-would-never-remember-2026-content" class="content-section">
             <h2 class="text-2xl md:text-3xl font-light mb-3 lowercase">i would never remember saying something so stupid, 2026</h2>
             
@@ -183,21 +190,122 @@
                 </div>
             </div>
 
-            <!-- Horizontal scroll gallery container with reduced bottom margin & tight vertical fit -->
-            <div class="flex flex-nowrap overflow-x-auto space-x-4 pb-2 pt-1 snap-x snap-mandatory scrollbar-thin w-full">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_1.jpg" alt="i would never remember 2026 - 1" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_1.jpg" alt="i would never remember 2026 - text 1" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_2.jpg" alt="i would never remember 2026 - 2" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_3.jpg" alt="i would never remember 2026 - 3" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_2.jpg" alt="i would never remember 2026 - text 2" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_5.jpg" alt="i would never remember 2026 - 5" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_6.jpg" alt="i would never remember 2026 - 6" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_7.jpg" alt="i would never remember 2026 - 7" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_8.jpg" alt="i would never remember 2026 - 8" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_9.jpg" alt="i would never remember 2026 - 9" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_10.jpg" alt="i would never remember 2026 - 10" class="h-[50vh] md:h-[calc(100vh-16.5rem)] min-h-[250px] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+            <!-- Horizontal scroll gallery container -->
+            <div class="flex flex-nowrap overflow-x-auto space-x-4 pb-2 pt-1 snap-x snap-mandatory w-full">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_1.jpg" alt="i would never remember 2026 - 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_1.jpg" alt="i would never remember 2026 - text 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_2.jpg" alt="i would never remember 2026 - 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_3.jpg" alt="i would never remember 2026 - 3" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_2.jpg" alt="i would never remember 2026 - text 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_5.jpg" alt="i would never remember 2026 - 5" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_6.jpg" alt="i would never remember 2026 - 6" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_7.jpg" alt="i would never remember 2026 - 7" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_8.jpg" alt="i would never remember 2026 - 8" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_9.jpg" alt="i would never remember 2026 - 9" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_10.jpg" alt="i would never remember 2026 - 10" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
             </div>
         </div>
 
+        <!-- About Page -->
         <div id="about-content" class="content-section">
-<!-- ... existing code -->
+            <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">about</h2> 
+            <div class="max-w-2xl space-y-4 text-gray-700">
+                <p>Taavi Rekkaro (b. 1988, Estonia) studied printmaking at Estonian Academy of Arts. He is working to explore connections between painting and photography while trying to avoid any writing.</p>
+                <p class="pt-4 text-sm text-black">
+                    <a href="mailto:something@taavirekkaro.com" class="hover:underline">something@taavirekkaro.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_TITLE = 'taavi rekkaro';
+        const START_TIME = Date.UTC(2024, 11, 8, 10, 56, 0);
+
+        const pdfMap = {
+            'all-a-day': { title: "it's all a day - 2025", file: 'all-a-day.pdf', linkId: 'link-allday' },
+            'silent-scream': { title: 'silent scream - 2025', file: 'silent-scream.pdf', linkId: 'link-silent' },
+            'thanks': { title: 'thanks for everything', file: 'thanks.pdf', linkId: 'link-thanks' }
+        };
+
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+
+        function navigate(hash) {
+            window.location.hash = hash;
+            if (window.innerWidth <= 768) toggleMenu();
+        }
+
+        function renderContent() {
+            const hash = window.location.hash.slice(1) || 'home';
+            
+            // Hide all sections and reset link states
+            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+            document.querySelectorAll('.nav-link, .project-list-item').forEach(l => {
+                l.classList.remove('active', 'text-gray-900');
+                l.classList.add('text-gray-500');
+            });
+
+            const pdfData = pdfMap[hash];
+            
+            if (pdfData) {
+                const pdfSection = document.getElementById('pdf-content');
+                document.getElementById('pdf-title').textContent = pdfData.title;
+                
+                const pdfUrl = pdfData.file + '#view=FitW';
+                document.getElementById('pdf-viewer').src = pdfUrl;
+                document.getElementById('mobile-pdf-btn').href = pdfData.file;
+                
+                pdfSection.style.display = 'block';
+                document.title = `${BASE_TITLE} - ${pdfData.title}`;
+                
+                document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
+                const linkElem = document.getElementById(pdfData.linkId);
+                if (linkElem) linkElem.classList.add('active');
+                
+            } else {
+                const contentSection = document.getElementById(hash + '-content');
+                if (contentSection) {
+                    contentSection.style.display = 'block';
+                }
+                
+                if (hash === 'time') {
+                    document.title = `${BASE_TITLE} - time`;
+                    document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
+                    document.getElementById('link-time').classList.add('active');
+                } else if (hash === 'i-would-never-remember-2026') {
+                    document.title = `${BASE_TITLE} - i would never remember 2026`;
+                    const navEx = document.getElementById('nav-exhibitions');
+                    if (navEx) navEx.classList.add('active', 'text-gray-900');
+                    const linkEx = document.getElementById('link-i-would-never');
+                    if (linkEx) linkEx.classList.add('active');
+                } else if (hash === 'about' || hash === 'exhibitions') {
+                    document.title = BASE_TITLE;
+                    const navElem = document.getElementById('nav-' + hash);
+                    if (navElem) navElem.classList.add('active', 'text-gray-900');
+                } else {
+                    document.title = BASE_TITLE;
+                }
+            }
+        }
+        
+        const timeDisplay = document.getElementById('time-display');
+        function updateTimer() {
+            const totalElapsedMs = Date.now() - START_TIME;
+            let totalSeconds = Math.floor(totalElapsedMs / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            totalSeconds %= 3600;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const hundredths = Math.floor((totalElapsedMs % 1000) / 10); 
+            timeDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(hundredths).padStart(2, '0')}`;
+        }
+
+        window.addEventListener('hashchange', renderContent);
+        window.onload = function() {
+            renderContent();
+            updateTimer();
+            setInterval(updateTimer, 10);
+        };
+    </script>
+</body>
+</html>
