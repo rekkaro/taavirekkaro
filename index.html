@@ -62,14 +62,14 @@
         
         .content-section { display: none; }
         
-        /* Improved PDF Viewer Container for Mobile */
+        /* Improved PDF Viewer Container */
         .pdf-wrapper {
             width: 100%;
             height: 75vh;
             margin-top: 1rem;
             border: 1px solid #f3f4f6;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Essential for iOS scrolling */
+            -webkit-overflow-scrolling: touch; 
             position: relative;
         }
 
@@ -80,37 +80,21 @@
             display: block;
         }
 
-        /* Mobile fallback button style */
+        /* Mobile text link style */
         .mobile-pdf-link {
             display: none;
         }
         
-        /* Hint for multi-page content */
-        .scroll-hint {
-            display: none;
-            font-size: 0.75rem;
-            color: #999;
-            margin-bottom: 0.5rem;
-        }
-
         @media (max-width: 768px) {
             .mobile-pdf-link {
-                display: block;
-                width: 100%;
-                text-align: center;
-                background: #000;
-                color: #fff;
-                padding: 0.75rem;
-                border-radius: 4px;
-                margin-bottom: 1.5rem;
+                display: inline-block;
+                margin-bottom: 1rem;
                 font-size: 0.875rem;
-                text-decoration: none;
+                text-decoration: underline;
+                color: #000;
             }
             .pdf-wrapper {
-                height: 50vh; /* Shorter to emphasize the main button */
-            }
-            .scroll-hint {
-                display: block;
+                height: 50vh; 
             }
         }
     </style>
@@ -130,7 +114,6 @@
             
             <ul id="projects-list" class="mt-2 pl-4 space-y-1 transition-all duration-300">
                 <li><a id="link-time" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#time')">time</a></li>
-                <li><a id="link-losing" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#losing-tomorrow')">losing tomorrow 2024</a></li>
                 <li><a id="link-allday" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#all-a-day')">it's all a day - 2025</a></li>
                 <li><a id="link-silent" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#silent-scream')">silent scream - 2025</a></li>
                 <li><a id="link-thanks" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#thanks')">thanks for everything</a></li>
@@ -139,6 +122,9 @@
             <div id="nav-installations" class="nav-link text-gray-500 mt-4" onclick="navigate('#installations')">
                 installations
             </div>
+            <ul id="installations-list" class="mt-2 pl-4 space-y-1 transition-all duration-300">
+                <li><a id="link-i-would-never" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#i-would-never-remember-2026')">i would never remember 2026</a></li>
+            </ul>
 
             <div id="nav-about" class="nav-link text-gray-500 mt-4" onclick="navigate('#about')">
                 about
@@ -158,14 +144,12 @@
             <div id="time-display" class="font-mono">--:--:--.--</div>
         </div>
 
-        <!-- Universal PDF Section with Mobile Fallback -->
+        <!-- Universal PDF Section with Mobile Text Link -->
         <div id="pdf-content" class="content-section">
-            <h2 id="pdf-title" class="text-2xl md:text-3xl font-light mb-8 lowercase">project</h2>
+            <h2 id="pdf-title" class="text-2xl md:text-3xl font-light mb-4 lowercase">project</h2>
             
-            <!-- Prominent Mobile Button -->
-            <a id="mobile-pdf-btn" href="#" target="_blank" class="mobile-pdf-link lowercase">view full portfolio</a>
-            
-            <p class="scroll-hint lowercase italic">preview (scroll for more or open above)</p>
+            <!-- Minimalist Mobile Text Link -->
+            <a id="mobile-pdf-btn" href="#" target="_blank" class="mobile-pdf-link lowercase">view full pdf</a>
             
             <div class="pdf-wrapper">
                 <iframe id="pdf-viewer" class="pdf-container" src=""></iframe>
@@ -174,7 +158,43 @@
 
         <div id="installations-content" class="content-section">
             <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">installations</h2>
-            <div class="text-gray-400 text-sm italic lowercase">coming soon</div>
+            <div class="text-gray-700 text-sm lowercase">
+                <a class="hover:underline cursor-pointer" onclick="navigate('#i-would-never-remember-2026')">i would never remember 2026</a>
+            </div>
+        </div>
+
+        <!-- Installation Gallery: i would never remember 2026 -->
+        <div id="i-would-never-remember-2026-content" class="content-section">
+            <h2 class="text-2xl md:text-3xl font-light mb-6 lowercase">i would never remember saying something so stupid, 2026</h2>
+            
+            <!-- Exhibition Metadata & Details -->
+            <div class="mb-10 text-sm text-gray-700 leading-relaxed max-w-xl font-light space-y-4">
+                <div>
+                    <p class="font-normal text-black">i would never remember<br>saying something so stupid*</p>
+                    <p class="mt-1">Taavi Rekkaro</p>
+                    <p class="text-xs text-gray-500 mt-2">*said by tor, London morning<br>16.05.2026</p>
+                </div>
+                <div class="pt-2 text-xs text-gray-600 border-t border-gray-100">
+                    <p>Summer solo show, presented at</p>
+                    <p class="text-black">Vasli Souza Båstad</p>
+                    <p>10.07 - 02.08.26</p>
+                </div>
+            </div>
+
+            <!-- Horizontal scroll gallery container -->
+            <div class="flex flex-nowrap overflow-x-auto space-x-6 pb-6 pt-2 snap-x snap-mandatory scrollbar-thin">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_1.jpg" alt="i would never remember 2026 - 1" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_1.jpg" alt="i would never remember 2026 - text 1" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_2.jpg" alt="i would never remember 2026 - 2" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_3.jpg" alt="i would never remember 2026 - 3" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_2.jpg" alt="i would never remember 2026 - text 2" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_5.jpg" alt="i would never remember 2026 - 5" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_6.jpg" alt="i would never remember 2026 - 6" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_7.jpg" alt="i would never remember 2026 - 7" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_8.jpg" alt="i would never remember 2026 - 8" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_9.jpg" alt="i would never remember 2026 - 9" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_10.jpg" alt="i would never remember 2026 - 10" class="h-[50vh] md:h-[65vh] w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+            </div>
         </div>
 
         <div id="about-content" class="content-section">
@@ -193,7 +213,6 @@
         const START_TIME = Date.UTC(2024, 11, 8, 10, 56, 0);
 
         const pdfMap = {
-            'losing-tomorrow': { title: 'losing tomorrow 2024', file: 'losing-tomorrow.pdf', linkId: 'link-losing' },
             'all-a-day': { title: "it's all a day - 2025", file: 'all-a-day.pdf', linkId: 'link-allday' },
             'silent-scream': { title: 'silent scream - 2025', file: 'silent-scream.pdf', linkId: 'link-silent' },
             'thanks': { title: 'thanks for everything', file: 'thanks.pdf', linkId: 'link-thanks' }
@@ -221,7 +240,6 @@
                 const pdfSection = document.getElementById('pdf-content');
                 document.getElementById('pdf-title').textContent = pdfData.title;
                 
-                // Fit to width parameter helps mobile display
                 const pdfUrl = pdfData.file + '#view=FitW';
                 document.getElementById('pdf-viewer').src = pdfUrl;
                 document.getElementById('mobile-pdf-btn').href = pdfData.file;
@@ -236,14 +254,22 @@
             } else {
                 const contentSection = document.getElementById(hash + '-content');
                 if (contentSection) contentSection.style.display = 'block';
-                document.title = (hash === 'time') ? `${BASE_TITLE} - time` : BASE_TITLE;
                 
                 if (hash === 'time') {
+                    document.title = `${BASE_TITLE} - time`;
                     document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
                     document.getElementById('link-time').classList.add('active');
+                } else if (hash === 'i-would-never-remember-2026') {
+                    document.title = `${BASE_TITLE} - i would never remember saying something so stupid, 2026`;
+                    document.getElementById('nav-installations').classList.add('active', 'text-gray-900');
+                    const linkElem = document.getElementById('link-i-would-never');
+                    if(linkElem) linkElem.classList.add('active');
                 } else if (hash === 'about' || hash === 'installations') {
+                    document.title = (hash === 'about') ? `${BASE_TITLE} - about` : `${BASE_TITLE} - installations`;
                     const navElem = document.getElementById('nav-' + hash);
                     if(navElem) navElem.classList.add('active', 'text-gray-900');
+                } else {
+                    document.title = BASE_TITLE;
                 }
             }
         }
