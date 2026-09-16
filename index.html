@@ -36,8 +36,8 @@
 
         #content-area {
             width: 100%;
-            max-width: 100%; 
-            padding: 3rem 4rem 1.5rem 4rem;
+            max-width: 100%;
+            padding: 3rem 6rem;
         }
         @media (max-width: 768px) {
             #content-area { padding: 1.5rem 1rem 3rem 1rem; width: 100%; max-width: 100%; }
@@ -63,7 +63,7 @@
         
         .content-section { display: none; }
         
-        /* Improved PDF Viewer Container */
+        /* PDF Viewer Container */
         .pdf-wrapper {
             width: 100%;
             height: 75vh;
@@ -81,20 +81,11 @@
             display: block;
         }
 
-        /* Mobile text link style */
         .mobile-pdf-link {
             display: none;
         }
         
-        /* Gallery Image Sizing for Desktop and Mobile */
-        .gallery-img {
-            height: calc(100vh - 16.5rem);
-            min-height: 250px;
-        }
         @media (max-width: 768px) {
-            .gallery-img {
-                height: 50vh;
-            }
             .mobile-pdf-link {
                 display: inline-block;
                 margin-bottom: 1rem;
@@ -107,7 +98,7 @@
             }
         }
 
-        /* Custom minimal white/light scrollbars for WebKit & Firefox */
+        /* Minimal / White Scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -116,15 +107,28 @@
             background: #ffffff;
         }
         ::-webkit-scrollbar-thumb {
-            background: #f3f4f6;
-            border-radius: 9999px;
+            background: #e5e7eb;
+            border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #e5e7eb;
+            background: #d1d5db;
         }
         * {
             scrollbar-width: thin;
-            scrollbar-color: #f3f4f6 #ffffff;
+            scrollbar-color: #e5e7eb #ffffff;
+        }
+
+        /* Responsive image height matching header */
+        .gallery-img {
+            height: calc(100vh - 16.5rem);
+            max-height: calc(100vh - 16.5rem);
+            min-height: 260px;
+        }
+        @media (max-width: 768px) {
+            .gallery-img {
+                height: 55vh;
+                max-height: 55vh;
+            }
         }
     </style>
 </head>
@@ -151,7 +155,9 @@
             <div id="nav-exhibitions" class="nav-link text-gray-500 mt-4" onclick="navigate('#exhibitions')">
                 exhibitions
             </div>
+            
             <ul id="exhibitions-list" class="mt-2 pl-4 space-y-1 transition-all duration-300">
+                <li><a id="link-do-i-need-to-say" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#do-i-need-to-say-it-out-myself-2026')">do i need to say it out myself? 2026</a></li>
                 <li><a id="link-i-would-never" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#i-would-never-remember-2026')">i would never remember 2026</a></li>
             </ul>
 
@@ -176,9 +182,7 @@
         <!-- Universal PDF Section -->
         <div id="pdf-content" class="content-section">
             <h2 id="pdf-title" class="text-2xl md:text-3xl font-light mb-4 lowercase">project</h2>
-            
             <a id="mobile-pdf-btn" href="#" target="_blank" class="mobile-pdf-link lowercase">view full pdf</a>
-            
             <div class="pdf-wrapper">
                 <iframe id="pdf-viewer" class="pdf-container" src=""></iframe>
             </div>
@@ -187,11 +191,77 @@
         <!-- Exhibitions overview page -->
         <div id="exhibitions-content" class="content-section">
             <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">exhibitions</h2>
-            <div class="text-gray-700 text-sm lowercase">
-                <a class="hover:underline cursor-pointer" onclick="navigate('#i-would-never-remember-2026')">i would never remember 2026</a>
+            <div class="text-gray-700 text-sm lowercase space-y-2">
+                <div>
+                    <a class="hover:underline cursor-pointer" onclick="navigate('#do-i-need-to-say-it-out-myself-2026')">do i need to say it out myself? 2026</a>
+                </div>
+                <div>
+                    <a class="hover:underline cursor-pointer" onclick="navigate('#i-would-never-remember-2026')">i would never remember 2026</a>
+                </div>
             </div>
         </div>
 
+        <!-- 1. Exhibition: do i need to say it out myself? 2026 -->
+        <div id="do-i-need-to-say-it-out-myself-2026-content" class="content-section">
+            <h2 class="text-2xl md:text-3xl font-light mb-3 lowercase">“do i need to say it out myself?” 2026</h2>
+            
+            <!-- Exhibition Metadata & Details -->
+            <div class="mb-4 text-sm text-gray-700 leading-relaxed max-w-xl font-light space-y-2 lowercase">
+                <div>
+                    <p class="text-black">“do i need to say it out myself?”</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="pt-2 text-xs text-gray-600 border-t border-gray-100 space-y-1">
+                    <p>duo show with hilla kurki “something that should be felt”</p>
+                    <p class="text-black">foku gallery</p>
+                    <p>06.08 - 26.09.2026</p>
+                </div>
+            </div>
+
+            <!-- Horizontal scroll gallery container -->
+            <div class="flex flex-nowrap overflow-x-auto space-x-4 pb-2 pt-1 snap-x snap-mandatory w-full">
+                <img src="01_foku_overview_taavi-rekkaro-skog.jpg" alt="taavi rekkaro - foku overview" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="02_Nyc_beers_2025_2026-skog.jpg" alt="taavi rekkaro - nyc beers" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="03_vosu%20dream_1_5_2024-skog.jpg" alt="taavi rekkaro - vosu dream" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="04_sweaty%20paris%20toilet_2026-skog.jpg" alt="taavi rekkaro - sweaty paris toilet" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="05_needle%20vail_2025_2026-skog.jpg" alt="taavi rekkaro - needle vail" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="06_nida%20still%20angry_2025_2026-skog.jpg" alt="taavi rekkaro - nida still angry" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="07_a%20classic%20american%20pool_2025-skog.jpg" alt="taavi rekkaro - a classic american pool" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="08_bastad%20decor_2026-skog.jpg" alt="taavi rekkaro - bastad decor" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="09_kutaisi%20wave_variation%201_2024_2026-skog.jpg" alt="taavi rekkaro - kutaisi wave" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="10_touching%20table-skog.jpg" alt="taavi rekkaro - touching table" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+            </div>
+
+            <!-- Full Exhibition Text Below Photos -->
+            <div class="mt-12 pt-6 max-w-xl text-sm text-gray-700 leading-relaxed font-light space-y-4 border-t border-gray-100 pb-16">
+                <p class="font-normal text-black lowercase">exhibition text:</p>
+                <div class="text-xs text-gray-500 space-y-0.5 lowercase">
+                    <p class="text-black font-normal">“do i need to say it out myself?”</p>
+                    <p>taavi rekkaro</p>
+                    <p>foku gallery</p>
+                    <p>august-september 2026</p>
+                </div>
+
+                <p>A moment before i didn’t know what i was feeling, although my gut, my body already knew. Instead i had to listen to myself, which brought out those words with a strange sparkle. How to better understand my problems, those that need to live with me. Mistakes that gain strength or are hidden according to the phase of the moon, the sun, hunger, or when was the last time i had sex?</p>
+
+                <p>The photos and “objects” on display treat photography as something that should be felt, that has its own memory and where closeness becomes part of the experience. Together, the artworks create a dialogue between distance and intimacy. Moments in everyday life, asking how do we stay connected to what is important. How can we be sure you even were there - were those moments real? What have you lost to confusion or simply forgotten? Fleeting moments captured as photos, quotes, text, paintings, sculptures or who knows in what shape.</p>
+
+                <p>This series is an attempt to replace a crushing core belief and to find a way to find the part that’s actually important. On the gallery wall is a melting moment, consisting of works starting from 2023. Captured moments with good friends, from places full of emotions or just to feel alive or just a little bit good. To be present and to listen what the body/mind is looking to catch.</p>
+
+                <p>The exhibition wall where time could dissolve, but next to it where you can spend time. The wall doesn’t hold a single story, but you should have time to find your own narrative.</p>
+
+                <div class="pl-4 py-2 border-l border-gray-200 text-black space-y-2 my-4">
+                    <p class="italic">“Margus* waits and looks at me. I wait and look at him.</p>
+                    <p class="italic">I ask: “Do i have to say it out myself?</p>
+                    <p class="italic">Margus looks,<br>Margus widens his eyes and nods slightly.</p>
+                    <p class="italic">I answer: “Because I am a bad person.””</p>
+                </div>
+
+                <p class="text-xs text-gray-500">conversation March 2021<br>*psychologist Margus</p>
+            </div>
+        </div>
+
+        <!-- 2. Exhibition: i would never remember 2026 -->
         <div id="i-would-never-remember-2026-content" class="content-section">
             <h2 class="text-2xl md:text-3xl font-light mb-3 lowercase">i would never remember saying something so stupid, 2026</h2>
             
@@ -212,26 +282,27 @@
 
             <!-- Horizontal scroll gallery container -->
             <div class="flex flex-nowrap overflow-x-auto space-x-4 pb-2 pt-1 snap-x snap-mandatory w-full">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_1.jpg" alt="i would never remember 2026 - 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_1.jpg" alt="i would never remember 2026 - text 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_2.jpg" alt="i would never remember 2026 - 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_3.jpg" alt="i would never remember 2026 - 3" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_2.jpg" alt="i would never remember 2026 - text 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_5.jpg" alt="i would never remember 2026 - 5" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_6.jpg" alt="i would never remember 2026 - 6" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_7.jpg" alt="i would never remember 2026 - 7" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_8.jpg" alt="i would never remember 2026 - 8" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_9.jpg" alt="i would never remember 2026 - 9" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_10.jpg" alt="i would never remember 2026 - 10" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_1.jpg" alt="taavi rekkaro - i would never remember 2026 - 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_1.jpg" alt="taavi rekkaro - i would never remember 2026 - text 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_2.jpg" alt="taavi rekkaro - i would never remember 2026 - 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_3.jpg" alt="taavi rekkaro - i would never remember 2026 - 3" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_2.jpg" alt="taavi rekkaro - i would never remember 2026 - text 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_5.jpg" alt="taavi rekkaro - i would never remember 2026 - 5" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_6.jpg" alt="taavi rekkaro - i would never remember 2026 - 6" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_7.jpg" alt="taavi rekkaro - i would never remember 2026 - 7" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_8.jpg" alt="taavi rekkaro - i would never remember 2026 - 8" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_9.jpg" alt="taavi rekkaro - i would never remember 2026 - 9" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
+                <img src="i%20would%20never/2026_VS_Taavi_WebRes_10.jpg" alt="taavi rekkaro - i would never remember 2026 - 10" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
             </div>
 
             <!-- Full Exhibition Text Below Photos -->
-            <div class="mt-12 pt-6 max-w-xl text-sm text-gray-700 leading-relaxed font-light space-y-4 lowercase border-t border-gray-100 pb-16">
-                <p>in may of 2026, rasmus, tor and taavi went to visit the photo london art fair. the title of this show is from one of those mornings: taavi read out a memory from the previous night, where his good friend tor tried to get to the root of their cause.</p>
-                <p class="pl-4 italic text-black font-normal">“we like to be like sad jazz<br>we want to be like sad jazz”</p>
-                <p>without writing down, this or these moments would just be lived but forgotten. (it’s also fun to see tor reacting to his past thoughts.</p>
-                <p>for taavi, catching moments is sacred. how can you be sure you even were there - did these moments truly exist? what have you lost if they get mangled up or simply forgotten?</p>
-                <p>in his process taavi is trying to catch fleeting moments like these - whether they come in the shape of photos, quotes, texts, paintings, sculptures or pieces of tape. presented in vasli souza, båstad, is a similar dissolving snapshot of taavi’s ongoing project, consisting of photos and sculptures starting from 2023. captured moments of good friends, places full of emotions and just trying to feel alive or just a bit happy.</p>
+            <div class="mt-12 pt-6 max-w-xl text-sm text-gray-700 leading-relaxed font-light space-y-4 border-t border-gray-100 pb-16">
+                <p class="font-normal text-black lowercase">exhibition text:</p>
+                <p class="lowercase">In May of 2026, rasmus, tor and taavi went to visit the photo london art fair. the title of this show is from one of those mornings: taavi read out a memory from the previous night, where his good friend tor tried to get to the root of their cause.</p>
+                <p class="pl-4 italic text-black font-normal lowercase">“we like to be like sad jazz<br>we want to be like sad jazz”</p>
+                <p class="lowercase">without writing down, this or these moments would just be lived but forgotten. (it’s also fun to see tor reacting to his past thoughts.</p>
+                <p class="lowercase">for taavi, catching moments is sacred. how can you be sure you even were there - did these moments truly exist? what have you lost if they get mangled up or simply forgotten?</p>
+                <p class="lowercase">in his process taavi is trying to catch fleeting moments like these - whether they come in the shape of photos, quotes, texts, paintings, sculptures or pieces of tape. presented in vasli souza, båstad, is a similar dissolving snapshot of taavi’s ongoing project, consisting of photos and sculptures starting from 2023. captured moments of good friends, places full of emotions and just trying to feel alive or just a bit happy.</p>
             </div>
         </div>
 
@@ -279,11 +350,8 @@
             if (pdfData) {
                 const pdfSection = document.getElementById('pdf-content');
                 document.getElementById('pdf-title').textContent = pdfData.title;
-                
-                const pdfUrl = pdfData.file + '#view=FitW';
-                document.getElementById('pdf-viewer').src = pdfUrl;
+                document.getElementById('pdf-viewer').src = pdfData.file + '#view=FitW';
                 document.getElementById('mobile-pdf-btn').href = pdfData.file;
-                
                 pdfSection.style.display = 'block';
                 document.title = `${BASE_TITLE} - ${pdfData.title}`;
                 
@@ -301,6 +369,12 @@
                     document.title = `${BASE_TITLE} - time`;
                     document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
                     document.getElementById('link-time').classList.add('active');
+                } else if (hash === 'do-i-need-to-say-it-out-myself-2026') {
+                    document.title = `${BASE_TITLE} - do i need to say it out myself? 2026`;
+                    const navEx = document.getElementById('nav-exhibitions');
+                    if (navEx) navEx.classList.add('active', 'text-gray-900');
+                    const linkEx = document.getElementById('link-do-i-need-to-say');
+                    if (linkEx) linkEx.classList.add('active');
                 } else if (hash === 'i-would-never-remember-2026') {
                     document.title = `${BASE_TITLE} - i would never remember 2026`;
                     const navEx = document.getElementById('nav-exhibitions');
