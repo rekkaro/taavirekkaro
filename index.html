@@ -499,6 +499,13 @@
         });
     }
 
+    function tryOtherCase(img) {
+        if (img.dataset.retried) return;
+        img.dataset.retried = '1';
+        img.src = img.src.replace(/\.(\w+)$/, (m, ext) =>
+            '.' + (ext === ext.toLowerCase() ? ext.toUpperCase() : ext.toLowerCase()));
+    }
+
     function buildPage(item, group) {
         const section = document.createElement('section');
         section.id = `${item.id}-content`;
@@ -519,7 +526,7 @@
             html += `<div class="gallery${hasCaptions ? ' has-captions' : ''}">` + photos.map((p, i) => {
                 const media = /\.(mp4|webm|mov)$/i.test(p.src)
                     ? `<video src="${p.src}#t=0.1" class="gallery-img" muted loop playsinline controls preload="metadata" aria-label="${esc(p.alt)}"></video>`
-                    : `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async"${i > 1 ? ' loading="lazy"' : ''}>`;
+                    : `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async" onerror="tryOtherCase(this)"${i > 1 ? ' loading="lazy"' : ''}>`;
                 return `<figure>${media}${p.caption ? `<figcaption>${p.caption}</figcaption>` : ''}</figure>`;
             }).join('') + `</div>`;
         }
@@ -606,7 +613,8 @@
         document.querySelectorAll('.gallery').forEach(g => {
             if (!g.offsetParent || window.innerWidth <= 768) return;
             const top = g.getBoundingClientRect().top + window.scrollY;
-            const room = g.classList.contains('has-captions') ? 64 : 40;
+            // space kept free under the photos, so the start of the text shows
+            const room = g.classList.contains('has-captions') ? 150 : 125;
             g.style.setProperty('--img-h', Math.max(260, window.innerHeight - top - room) + 'px');
         });
     }
