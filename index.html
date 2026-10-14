@@ -8,407 +8,439 @@
     <meta name="description" content="Official website and portfolio of taavi rekkaro, a multidisciplinary artist working with installation and conceptual media.">
     <meta name="keywords" content="taavi rekkaro, conceptual artist, installation art, fine art, tallinn, time project">
     <link rel="canonical" href="https://taavirekkaro.com/">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
+        /* ---------- base ---------- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
+        html { line-height: 1.5; -webkit-text-size-adjust: 100%; }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #ffffff;
             color: #000000;
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
         }
-        @media (max-width: 768px) {
-            body { padding-top: 3rem; }
-        }
+        img { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; cursor: pointer; }
+        button { font: inherit; color: inherit; background: none; cursor: pointer; }
+        ul { list-style: none; }
+        a:focus-visible, button:focus-visible { outline: 1px solid #000; outline-offset: 2px; }
 
+        /* ---------- sidebar ---------- */
+        #menu-button {
+            display: none;
+            position: fixed; top: 0; left: 0; z-index: 20;
+            padding: 1rem;
+            font-weight: 700; color: #111827; text-transform: lowercase;
+        }
         #sidebar {
-            width: 16rem; 
+            width: 16rem;
+            flex-shrink: 0;
             min-height: 100vh;
             position: sticky;
             top: 0;
             z-index: 10;
+            background: #fff;
+            padding: 2rem;
+            border-right: 1px solid #f3f4f6;
         }
-        @media (max-width: 768px) {
-            #sidebar {
-                width: 100%; height: 100%; position: fixed; left: -100%; transition: left 0.3s ease-in-out;
-            }
-            #sidebar.open { left: 0; }
-        }
-
-        #content-area {
-            width: 100%;
-            max-width: 100%;
-            padding: 3rem 6rem;
-        }
-        @media (max-width: 768px) {
-            #content-area { padding: 1.5rem 1rem 3rem 1rem; width: 100%; max-width: 100%; }
-        }
-        
-        #time-display {
-            font-size: 1rem; 
-            letter-spacing: 0.1em;
-            font-weight: 50;
-            white-space: nowrap;
-        }
-
-        .nav-link, .project-list-item {
-            transition: all 0.15s;
-            cursor: pointer;
-            padding: 0.25rem 0;
-            text-transform: lowercase; 
-        }
-        
-        .nav-link.active, .project-list-item.active {
-            color: #000000 !important;
-        }
-        
-        .content-section { display: none; }
-        
-        /* PDF Viewer Container */
-        .pdf-wrapper {
-            width: 100%;
-            height: 75vh;
-            margin-top: 1rem;
-            border: 1px solid #f3f4f6;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch; 
-            position: relative;
-        }
-
-        .pdf-container {
-            width: 100%;
-            height: 100%;
-            border: none;
+        #sidebar h1 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 2rem; text-transform: lowercase; }
+        .nav-group + .nav-group { margin-top: 1rem; }
+        .nav-link, .nav-item {
             display: block;
+            padding: 0.25rem 0;
+            color: #6b7280;
+            text-transform: lowercase;
+            transition: all 0.15s;
         }
-
-        .mobile-pdf-link {
+        .nav-list { margin-top: 0.5rem; padding-left: 1rem; }
+        .nav-list li + li { margin-top: 0.25rem; }
+        .nav-item:hover { color: #000; }
+        .nav-link.active, .nav-item.active { color: #000; }
+        #close-button {
             display: none;
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-pdf-link {
-                display: inline-block;
-                margin-bottom: 1rem;
-                font-size: 0.875rem;
-                text-decoration: underline;
-                color: #000;
-            }
-            .pdf-wrapper {
-                height: 50vh; 
-            }
+            position: absolute; top: 1rem; right: 1rem;
+            font-size: 1.25rem; line-height: 1.75rem; font-weight: 700;
         }
 
-        /* Minimal / White Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #ffffff;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #e5e7eb;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #d1d5db;
-        }
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: #e5e7eb #ffffff;
-        }
+        /* ---------- content ---------- */
+        #content-area { flex-grow: 1; min-width: 0; width: 100%; padding: 3rem 6rem; }
+        .content-section { display: none; }
 
-        /* Responsive image height matching header */
+        .page-title { font-size: 1.875rem; line-height: 2.25rem; font-weight: 300; text-transform: lowercase; margin-bottom: 0.75rem; }
+        .page-title.spaced { margin-bottom: 4rem; }
+
+        .meta {
+            margin-bottom: 1rem; max-width: 36rem;
+            font-size: 0.875rem; line-height: 1.625; font-weight: 300;
+            color: #374151; text-transform: lowercase;
+        }
+        .meta > * + * { margin-top: 0.5rem; }
+        .details { padding-top: 0.5rem; font-size: 0.75rem; line-height: 1rem; color: #4b5563; border-top: 1px solid #f3f4f6; }
+        .details > * + * { margin-top: 0.25rem; }
+
+        .gallery {
+            display: flex; flex-wrap: nowrap; gap: 1rem;
+            overflow-x: auto; scroll-snap-type: x mandatory;
+            padding: 0.25rem 0 0.5rem; width: 100%;
+        }
         .gallery-img {
             height: calc(100vh - 16.5rem);
             max-height: calc(100vh - 16.5rem);
             min-height: 260px;
+            width: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+            scroll-snap-align: start;
         }
+
+        .text-block {
+            margin-top: 3rem; padding-top: 1.5rem; padding-bottom: 4rem; max-width: 36rem;
+            font-size: 0.875rem; line-height: 1.625; font-weight: 300; color: #374151;
+            border-top: 1px solid #f3f4f6;
+        }
+        .text-block > * + * { margin-top: 1rem; }
+        .text-block .label { font-weight: 400; color: #000; text-transform: lowercase; }
+        .credits { font-size: 0.75rem; line-height: 1rem; color: #6b7280; text-transform: lowercase; }
+        .credits > * + * { margin-top: 0.125rem; }
+        .quote { margin: 1rem 0; padding: 0.5rem 0 0.5rem 1rem; border-left: 1px solid #e5e7eb; color: #000; }
+        .quote > * + * { margin-top: 0.5rem; }
+        .quote p { font-style: italic; }
+        .pull { padding-left: 1rem; font-style: italic; color: #000; font-weight: 400; }
+
+        /* small helpers used inside the texts */
+        .black { color: #000; }
+        .normal { font-weight: 400; }
+        .lc { text-transform: lowercase; }
+        .xs { font-size: 0.75rem; line-height: 1rem; }
+        .gray { color: #6b7280; }
+        .mt-1 { margin-top: 0.25rem; }
+        .pt-1 { padding-top: 0.25rem; }
+
+        .index { font-size: 0.875rem; line-height: 1.25rem; color: #374151; text-transform: lowercase; }
+        .index > * + * { margin-top: 0.5rem; }
+        .index a:hover { text-decoration: underline; }
+
+        .about-body { max-width: 42rem; color: #374151; }
+        .about-body > * + * { margin-top: 1rem; }
+        .email { padding-top: 1rem; font-size: 0.875rem; line-height: 1.25rem; color: #000; }
+        .email a:hover { text-decoration: underline; }
+
+        #time-display {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 1rem; letter-spacing: 0.1em; font-weight: 50; white-space: nowrap;
+        }
+
+        /* ---------- mobile ---------- */
         @media (max-width: 768px) {
-            .gallery-img {
-                height: 55vh;
-                max-height: 55vh;
+            body { padding-top: 3rem; flex-direction: column; }
+            #menu-button, #close-button { display: block; }
+            #sidebar {
+                position: fixed; top: 0; left: -100%;
+                width: 100%; height: 100%; overflow-y: auto;
+                transition: left 0.3s ease-in-out;
             }
+            #sidebar.open { left: 0; }
+            #content-area { padding: 1.5rem 1rem 3rem 1rem; }
+            .page-title { font-size: 1.5rem; line-height: 2rem; }
+            .gallery-img { height: 55vh; max-height: 55vh; }
         }
+
+        /* ---------- minimal scrollbars ---------- */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #ffffff; }
+        ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+        * { scrollbar-width: thin; scrollbar-color: #e5e7eb #ffffff; }
     </style>
 </head>
-<body class="flex md:flex-row flex-col">
+<body>
 
-    <button id="menu-button" class="md:hidden fixed top-0 left-0 p-4 z-20 lowercase text-gray-900 font-bold" onclick="toggleMenu()">
-        menu
-    </button>
-    
-    <div id="sidebar" class="bg-white p-8 md:block border-r border-gray-100">
-        <h1 class="text-xl font-bold mb-8 lowercase">taavi rekkaro</h1>
-        <nav>
-            <div id="nav-projects" class="nav-link text-gray-500" onclick="navigate('#time')">
-                projects
+    <button id="menu-button" type="button">menu</button>
+
+    <aside id="sidebar">
+        <h1>taavi rekkaro</h1>
+        <nav id="nav"></nav>
+        <button id="close-button" type="button" aria-label="close menu">&times;</button>
+    </aside>
+
+    <main id="content-area">
+        <section id="home-content" class="content-section"></section>
+
+        <section id="about-content" class="content-section">
+            <h2 class="page-title spaced">about</h2>
+            <div class="about-body">
+                <p>Taavi Rekkaro (b. 1988, Estonia) studied printmaking at Estonian Academy of Arts. He is working to explore connections between painting and photography while trying to avoid any writing.</p>
+                <p class="email"><a href="mailto:something@taavirekkaro.com">something@taavirekkaro.com</a></p>
             </div>
-            
-            <ul id="projects-list" class="mt-2 pl-4 space-y-1 transition-all duration-300">
-                <li><a id="link-time" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#time')">time</a></li>
-                <li><a id="link-allday" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#all-a-day')">it's all a day - 2025</a></li>
-                <li><a id="link-silent" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#silent-scream')">silent scream - 2025</a></li>
-                <li><a id="link-thanks" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#thanks')">thanks for everything</a></li>
-            </ul>
+        </section>
+        <!-- exhibition and project pages are built automatically from the lists below -->
+    </main>
 
-            <div id="nav-exhibitions" class="nav-link text-gray-500 mt-4" onclick="navigate('#exhibitions')">
-                exhibitions
-            </div>
-            
-            <ul id="exhibitions-list" class="mt-2 pl-4 space-y-1 transition-all duration-300">
-                <li><a id="link-do-i-need-to-say" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#do-i-need-to-say-it-out-myself-2026')">do i need to say it out myself? 2026</a></li>
-                <li><a id="link-i-would-never" class="project-list-item text-gray-500 hover:text-black" onclick="navigate('#i-would-never-remember-2026')">i would never remember 2026</a></li>
-            </ul>
+    <script>
+    /* =====================================================================
+       YOUR CONTENT — this is the only part you need to edit.
 
-            <div id="nav-about" class="nav-link text-gray-500 mt-4" onclick="navigate('#about')">
-                about
-            </div>
-        </nav>
-        
-        <button class="md:hidden absolute top-4 right-4 text-xl font-bold" onclick="toggleMenu()">
-            &times;
-        </button>
-    </div>
+       To add a new show or project:
+         1. Make a folder next to index.html (e.g.  thanks/ ) and put the photos in it.
+         2. Copy one block below, change the id, menu name, folder and photos.
+         3. The menu, the overview page and the photo page appear by themselves.
 
-    <div id="content-area" class="flex-grow">
-        <div id="home-content" class="content-section"></div>
-        
-        <div id="time-content" class="content-section">
-            <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">time</h2>
-            <div id="time-display" class="font-mono">--:--:--.--</div>
-        </div>
+       Photos can be listed two ways:
+         images: ['first.jpg', 'second.jpg']      -> shown in this order
+         count: 8                                 -> uses 1.jpg, 2.jpg ... 8.jpg
+         (add  ext: 'jpeg'  if your files end in .jpeg)
 
-        <!-- Universal PDF Section -->
-        <div id="pdf-content" class="content-section">
-            <h2 id="pdf-title" class="text-2xl md:text-3xl font-light mb-4 lowercase">project</h2>
-            <a id="mobile-pdf-btn" href="#" target="_blank" class="mobile-pdf-link lowercase">view full pdf</a>
-            <div class="pdf-wrapper">
-                <iframe id="pdf-viewer" class="pdf-container" src=""></iframe>
-            </div>
-        </div>
+       Extra options:
+         draft: true   -> page works by its link, but is hidden from the menu
+         text: `...`   -> text under the photos (leave out if not needed)
+       Order in each list = order in the menu (newest first).
+       ===================================================================== */
 
-        <!-- Exhibitions overview page -->
-        <div id="exhibitions-content" class="content-section">
-            <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">exhibitions</h2>
-            <div class="text-gray-700 text-sm lowercase space-y-2">
+    const EXHIBITIONS = [
+        {
+            id: 'do-i-need-to-say-it-out-myself-2026',
+            menu: 'do i need to say it out myself? 2026',
+            title: '“do i need to say it out myself?” 2026',
+            folder: '',   // these photos sit next to index.html
+            images: [
+                { file: '01_foku_overview_taavi-rekkaro-skog.jpeg', alt: 'foku overview' },
+                { file: '02_Nyc_beers_2025_2026-skog.jpeg', alt: 'nyc beers' },
+                { file: '03_vosu dream_1_5_2024-skog.jpeg', alt: 'vosu dream' },
+                { file: '04_sweaty paris toilet_2026-skog.jpeg', alt: 'sweaty paris toilet' },
+                { file: '05_needle vail_2025_2026-skog.jpeg', alt: 'needle vail' },
+                { file: '06_nida still angry_2025_2026-skog.jpeg', alt: 'nida still angry' },
+                { file: '07_a classic american pool_2025-skog.jpeg', alt: 'a classic american pool' },
+                { file: '08_bastad decor_2026-skog.jpeg', alt: 'bastad decor' },
+                { file: '09_kutaisi wave_variation 1_2024_2026-skog.jpeg', alt: 'kutaisi wave' },
+                { file: '10_touching table-skog.jpeg', alt: 'touching table' }
+            ],
+            meta: `
                 <div>
-                    <a class="hover:underline cursor-pointer" onclick="navigate('#do-i-need-to-say-it-out-myself-2026')">do i need to say it out myself? 2026</a>
-                </div>
-                <div>
-                    <a class="hover:underline cursor-pointer" onclick="navigate('#i-would-never-remember-2026')">i would never remember 2026</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- 1. Exhibition: do i need to say it out myself? 2026 -->
-        <div id="do-i-need-to-say-it-out-myself-2026-content" class="content-section">
-            <h2 class="text-2xl md:text-3xl font-light mb-3 lowercase">“do i need to say it out myself?” 2026</h2>
-            
-            <!-- Exhibition Metadata & Details -->
-            <div class="mb-4 text-sm text-gray-700 leading-relaxed max-w-xl font-light space-y-2 lowercase">
-                <div>
-                    <p class="text-black">“do i need to say it out myself?”</p>
+                    <p class="black">“do i need to say it out myself?”</p>
                     <p class="mt-1">taavi rekkaro</p>
                 </div>
-                <div class="pt-2 text-xs text-gray-600 border-t border-gray-100 space-y-1">
+                <div class="details">
                     <p>duo show with hilla kurki “something that should be felt”</p>
-                    <p class="text-black">foku gallery</p>
+                    <p class="black">foku gallery</p>
                     <p>06.08 - 26.09.2026</p>
-                </div>
-            </div>
-
-            <!-- Horizontal scroll gallery container -->
-            <div class="flex flex-nowrap overflow-x-auto space-x-4 pb-2 pt-1 snap-x snap-mandatory w-full">
-                <img src="01_foku_overview_taavi-rekkaro-skog.jpeg" alt="taavi rekkaro - foku overview" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="02_Nyc_beers_2025_2026-skog.jpeg" alt="taavi rekkaro - nyc beers" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="03_vosu%20dream_1_5_2024-skog.jpeg" alt="taavi rekkaro - vosu dream" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="04_sweaty%20paris%20toilet_2026-skog.jpeg" alt="taavi rekkaro - sweaty paris toilet" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="05_needle%20vail_2025_2026-skog.jpeg" alt="taavi rekkaro - needle vail" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="06_nida%20still%20angry_2025_2026-skog.jpeg" alt="taavi rekkaro - nida still angry" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="07_a%20classic%20american%20pool_2025-skog.jpeg" alt="taavi rekkaro - a classic american pool" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="08_bastad%20decor_2026-skog.jpeg" alt="taavi rekkaro - bastad decor" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="09_kutaisi%20wave_variation%201_2024_2026-skog.jpeg" alt="taavi rekkaro - kutaisi wave" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="10_touching%20table-skog.jpeg" alt="taavi rekkaro - touching table" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-            </div>
-
-            <!-- Full Exhibition Text Below Photos -->
-            <div class="mt-12 pt-6 max-w-xl text-sm text-gray-700 leading-relaxed font-light space-y-4 border-t border-gray-100 pb-16">
-                <p class="font-normal text-black lowercase">exhibition text:</p>
-                <div class="text-xs text-gray-500 space-y-0.5 lowercase">
-                    <p class="text-black font-normal">“do i need to say it out myself?”</p>
+                </div>`,
+            text: `
+                <div class="credits">
+                    <p class="black normal">“do i need to say it out myself?”</p>
                     <p>taavi rekkaro</p>
                     <p>foku gallery</p>
                     <p>august-september 2026</p>
                 </div>
-
                 <p>A moment before i didn’t know what i was feeling, although my gut, my body already knew. Instead i had to listen to myself, which brought out those words with a strange sparkle. How to better understand my problems, those that need to live with me. Mistakes that gain strength or are hidden according to the phase of the moon, the sun, hunger, or when was the last time i had sex?</p>
-
                 <p>The photos and “objects” on display treat photography as something that should be felt, that has its own memory and where closeness becomes part of the experience. Together, the artworks create a dialogue between distance and intimacy. Moments in everyday life, asking how do we stay connected to what is important. How can we be sure you even were there - were those moments real? What have you lost to confusion or simply forgotten? Fleeting moments captured as photos, quotes, text, paintings, sculptures or who knows in what shape.</p>
-
                 <p>This series is an attempt to replace a crushing core belief and to find a way to find the part that’s actually important. On the gallery wall is a melting moment, consisting of works starting from 2023. Captured moments with good friends, from places full of emotions or just to feel alive or just a little bit good. To be present and to listen what the body/mind is looking to catch.</p>
-
                 <p>The exhibition wall where time could dissolve, but next to it where you can spend time. The wall doesn’t hold a single story, but you should have time to find your own narrative.</p>
-
-                <div class="pl-4 py-2 border-l border-gray-200 text-black space-y-2 my-4">
-                    <p class="italic">“Margus* waits and looks at me. I wait and look at him.</p>
-                    <p class="italic">I ask: “Do i have to say it out myself?</p>
-                    <p class="italic">Margus looks,<br>Margus widens his eyes and nods slightly.</p>
-                    <p class="italic">I answer: “Because I am a bad person.””</p>
+                <div class="quote">
+                    <p>“Margus* waits and looks at me. I wait and look at him.</p>
+                    <p>I ask: “Do i have to say it out myself?</p>
+                    <p>Margus looks,<br>Margus widens his eyes and nods slightly.</p>
+                    <p>I answer: “Because I am a bad person.””</p>
                 </div>
-
-                <p class="text-xs text-gray-500">conversation March 2021<br>*psychologist Margus</p>
-            </div>
-        </div>
-
-        <!-- 2. Exhibition: i would never remember 2026 -->
-        <div id="i-would-never-remember-2026-content" class="content-section">
-            <h2 class="text-2xl md:text-3xl font-light mb-3 lowercase">i would never remember saying something so stupid, 2026</h2>
-            
-            <!-- Exhibition Metadata & Details -->
-            <div class="mb-4 text-sm text-gray-700 leading-relaxed max-w-xl font-light space-y-2 lowercase">
+                <p class="xs gray">conversation March 2021<br>*psychologist Margus</p>`
+        },
+        {
+            id: 'i-would-never-remember-2026',
+            menu: 'i would never remember 2026',
+            title: 'i would never remember saying something so stupid, 2026',
+            folder: 'i would never',
+            images: [
+                '2026_VS_Taavi_WebRes_1.jpg',
+                '2026_VS_Taavi_HighRes_text_1.jpg',
+                '2026_VS_Taavi_WebRes_2.jpg',
+                '2026_VS_Taavi_WebRes_3.jpg',
+                '2026_VS_Taavi_HighRes_text_2.jpg',
+                '2026_VS_Taavi_WebRes_5.jpg',
+                '2026_VS_Taavi_WebRes_6.jpg',
+                '2026_VS_Taavi_WebRes_7.jpg',
+                '2026_VS_Taavi_WebRes_8.jpg',
+                '2026_VS_Taavi_WebRes_9.jpg',
+                '2026_VS_Taavi_WebRes_10.jpg'
+            ],
+            meta: `
                 <div>
-                    <p class="text-black">i would never remember<br>saying something so stupid*</p>
+                    <p class="black">i would never remember<br>saying something so stupid*</p>
                     <p class="mt-1">taavi rekkaro</p>
-                    <p class="text-xs text-gray-500 mt-1">*said by tor, london morning<br>16.05.2026</p>
+                    <p class="xs gray mt-1">*said by tor, london morning<br>16.05.2026</p>
                 </div>
-                <div class="pt-2 text-xs text-gray-600 border-t border-gray-100 space-y-1">
+                <div class="details">
                     <p>summer solo show, presented at</p>
-                    <p class="text-black">vasli souza båstad</p>
+                    <p class="black">vasli souza båstad</p>
                     <p>10.07 - 02.08.26</p>
-                    <p class="pt-1 text-gray-500">installation views by: kunstdok // tor s. ulstein</p>
-                </div>
-            </div>
+                    <p class="pt-1 gray">installation views by: kunstdok // tor s. ulstein</p>
+                </div>`,
+            text: `
+                <p class="lc">In May of 2026, rasmus, tor and taavi went to visit the photo london art fair. the title of this show is from one of those mornings: taavi read out a memory from the previous night, where his good friend tor tried to get to the root of their cause.</p>
+                <p class="pull lc">“we like to be like sad jazz<br>we want to be like sad jazz”</p>
+                <p class="lc">without writing down, this or these moments would just be lived but forgotten. (it’s also fun to see tor reacting to his past thoughts.</p>
+                <p class="lc">for taavi, catching moments is sacred. how can you be sure you even were there - did these moments truly exist? what have you lost if they get mangled up or simply forgotten?</p>
+                <p class="lc">in his process taavi is trying to catch fleeting moments like these - whether they come in the shape of photos, quotes, texts, paintings, sculptures or pieces of tape. presented in vasli souza, båstad, is a similar dissolving snapshot of taavi’s ongoing project, consisting of photos and sculptures starting from 2023. captured moments of good friends, places full of emotions and just trying to feel alive or just a bit happy.</p>`
+        }
+    ];
 
-            <!-- Horizontal scroll gallery container -->
-            <div class="flex flex-nowrap overflow-x-auto space-x-4 pb-2 pt-1 snap-x snap-mandatory w-full">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_1.jpg" alt="taavi rekkaro - i would never remember 2026 - 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_1.jpg" alt="taavi rekkaro - i would never remember 2026 - text 1" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_2.jpg" alt="taavi rekkaro - i would never remember 2026 - 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_3.jpg" alt="taavi rekkaro - i would never remember 2026 - 3" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_HighRes_text_2.jpg" alt="taavi rekkaro - i would never remember 2026 - text 2" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_5.jpg" alt="taavi rekkaro - i would never remember 2026 - 5" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_6.jpg" alt="taavi rekkaro - i would never remember 2026 - 6" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_7.jpg" alt="taavi rekkaro - i would never remember 2026 - 7" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_8.jpg" alt="taavi rekkaro - i would never remember 2026 - 8" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_9.jpg" alt="taavi rekkaro - i would never remember 2026 - 9" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-                <img src="i%20would%20never/2026_VS_Taavi_WebRes_10.jpg" alt="taavi rekkaro - i would never remember 2026 - 10" class="gallery-img w-auto object-contain flex-shrink-0 snap-start" loading="lazy">
-            </div>
+    const PROJECTS = [
+        { id: 'time', menu: 'time', type: 'time' },
+        {
+            id: 'all-a-day',
+            menu: "it's all a day - 2025",
+            folder: 'all-a-day',
+            images: []        // add photo file names here, or use  count: 10
+        },
+        {
+            id: 'silent-scream',
+            menu: 'silent scream - 2025',
+            folder: 'silent-scream',
+            images: []
+        },
+        {
+            id: 'thanks',
+            menu: 'thanks for everything',
+            folder: 'thanks',
+            images: []
+        }
+    ];
 
-            <!-- Full Exhibition Text Below Photos -->
-            <div class="mt-12 pt-6 max-w-xl text-sm text-gray-700 leading-relaxed font-light space-y-4 border-t border-gray-100 pb-16">
-                <p class="font-normal text-black lowercase">exhibition text:</p>
-                <p class="lowercase">In May of 2026, rasmus, tor and taavi went to visit the photo london art fair. the title of this show is from one of those mornings: taavi read out a memory from the previous night, where his good friend tor tried to get to the root of their cause.</p>
-                <p class="pl-4 italic text-black font-normal lowercase">“we like to be like sad jazz<br>we want to be like sad jazz”</p>
-                <p class="lowercase">without writing down, this or these moments would just be lived but forgotten. (it’s also fun to see tor reacting to his past thoughts.</p>
-                <p class="lowercase">for taavi, catching moments is sacred. how can you be sure you even were there - did these moments truly exist? what have you lost if they get mangled up or simply forgotten?</p>
-                <p class="lowercase">in his process taavi is trying to catch fleeting moments like these - whether they come in the shape of photos, quotes, texts, paintings, sculptures or pieces of tape. presented in vasli souza, båstad, is a similar dissolving snapshot of taavi’s ongoing project, consisting of photos and sculptures starting from 2023. captured moments of good friends, places full of emotions and just trying to feel alive or just a bit happy.</p>
-            </div>
-        </div>
+    /* =====================================================================
+       Site code below — no need to touch.
+       ===================================================================== */
 
-        <!-- About Page -->
-        <div id="about-content" class="content-section">
-            <h2 class="text-2xl md:text-3xl font-light mb-16 lowercase">about</h2> 
-            <div class="max-w-2xl space-y-4 text-gray-700">
-                <p>Taavi Rekkaro (b. 1988, Estonia) studied printmaking at Estonian Academy of Arts. He is working to explore connections between painting and photography while trying to avoid any writing.</p>
-                <p class="pt-4 text-sm text-black">
-                    <a href="mailto:something@taavirekkaro.com" class="hover:underline">something@taavirekkaro.com</a>
-                </p>
-            </div>
-        </div>
-    </div>
+    const BASE_TITLE = 'taavi rekkaro';
+    const START_TIME = Date.UTC(2024, 11, 8, 10, 56, 0);
+    const GROUPS = [
+        { key: 'exhibitions', label: 'exhibitions', items: EXHIBITIONS, textLabel: 'exhibition text:' },
+        { key: 'projects', label: 'projects', items: PROJECTS, textLabel: 'text:' }
+    ];
+    const ROUTES = {};
 
-    <script>
-        const BASE_TITLE = 'taavi rekkaro';
-        const START_TIME = Date.UTC(2024, 11, 8, 10, 56, 0);
+    const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
-        const pdfMap = {
-            'all-a-day': { title: "it's all a day - 2025", file: 'all-a-day.pdf', linkId: 'link-allday' },
-            'silent-scream': { title: 'silent scream - 2025', file: 'silent-scream.pdf', linkId: 'link-silent' },
-            'thanks': { title: 'thanks for everything', file: 'thanks.pdf', linkId: 'link-thanks' }
-        };
+    function photosOf(item) {
+        let list = item.images || [];
+        if (!list.length && item.count) {
+            list = Array.from({ length: item.count }, (_, i) => `${i + 1}.${item.ext || 'jpg'}`);
+        }
+        return list.map((entry, i) => {
+            const file = typeof entry === 'string' ? entry : entry.file;
+            const alt = typeof entry === 'string' ? `${item.menu} - ${i + 1}` : entry.alt;
+            return { src: encodeURI(item.folder ? `${item.folder}/${file}` : file), alt: `taavi rekkaro - ${alt}` };
+        });
+    }
 
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+    function buildPage(item, group) {
+        const section = document.createElement('section');
+        section.id = `${item.id}-content`;
+        section.className = 'content-section';
 
-        function navigate(hash) {
-            window.location.hash = hash;
-            if (window.innerWidth <= 768) toggleMenu();
+        if (item.type === 'time') {
+            section.innerHTML = `<h2 class="page-title spaced">${item.title || item.menu}</h2>
+                                 <div id="time-display">--:--:--.--</div>`;
+            return section;
         }
 
-        function renderContent() {
-            const hash = window.location.hash.slice(1) || 'home';
-            
-            // Hide all sections and reset link states
-            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
-            document.querySelectorAll('.nav-link, .project-list-item').forEach(l => {
-                l.classList.remove('active', 'text-gray-900');
-                l.classList.add('text-gray-500');
+        let html = `<h2 class="page-title">${item.title || item.menu}</h2>`;
+        if (item.meta) html += `<div class="meta">${item.meta}</div>`;
+
+        const photos = photosOf(item);
+        if (photos.length) {
+            html += `<div class="gallery">` + photos.map((p, i) =>
+                `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async"${i > 1 ? ' loading="lazy"' : ''}>`
+            ).join('') + `</div>`;
+        }
+
+        if (item.text) {
+            const label = item.textLabel ?? group.textLabel;
+            html += `<div class="text-block">${label ? `<p class="label">${label}</p>` : ''}${item.text}</div>`;
+        }
+
+        section.innerHTML = html;
+        return section;
+    }
+
+    function buildOverview(group, visible) {
+        const section = document.createElement('section');
+        section.id = `${group.key}-content`;
+        section.className = 'content-section';
+        section.innerHTML = `<h2 class="page-title spaced">${group.label}</h2>
+            <div class="index">${visible.map(it => `<div><a href="#${it.id}">${it.menu}</a></div>`).join('')}</div>`;
+        return section;
+    }
+
+    function buildSite() {
+        const nav = document.getElementById('nav');
+        const main = document.getElementById('content-area');
+        const about = document.getElementById('about-content');
+        let navHtml = '';
+
+        GROUPS.forEach(group => {
+            const visible = group.items.filter(it => !it.draft);
+            navHtml += `<div class="nav-group">
+                <a href="#${group.key}" id="nav-${group.key}" class="nav-link">${group.label}</a>
+                <ul class="nav-list">${visible.map(it =>
+                    `<li><a href="#${it.id}" id="link-${it.id}" class="nav-item">${it.menu}</a></li>`).join('')}
+                </ul></div>`;
+
+            main.insertBefore(buildOverview(group, visible), about);
+            ROUTES[group.key] = { group: group.key };
+            group.items.forEach(item => {
+                main.insertBefore(buildPage(item, group), about);
+                ROUTES[item.id] = { group: group.key, item: item.id, title: item.menu };
             });
+        });
 
-            const pdfData = pdfMap[hash];
-            
-            if (pdfData) {
-                const pdfSection = document.getElementById('pdf-content');
-                document.getElementById('pdf-title').textContent = pdfData.title;
-                document.getElementById('pdf-viewer').src = pdfData.file + '#view=FitW';
-                document.getElementById('mobile-pdf-btn').href = pdfData.file;
-                pdfSection.style.display = 'block';
-                document.title = `${BASE_TITLE} - ${pdfData.title}`;
-                
-                document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
-                const linkElem = document.getElementById(pdfData.linkId);
-                if (linkElem) linkElem.classList.add('active');
-                
-            } else {
-                const contentSection = document.getElementById(hash + '-content');
-                if (contentSection) {
-                    contentSection.style.display = 'block';
-                }
-                
-                if (hash === 'time') {
-                    document.title = `${BASE_TITLE} - time`;
-                    document.getElementById('nav-projects').classList.add('active', 'text-gray-900');
-                    document.getElementById('link-time').classList.add('active');
-                } else if (hash === 'do-i-need-to-say-it-out-myself-2026') {
-                    document.title = `${BASE_TITLE} - do i need to say it out myself? 2026`;
-                    const navEx = document.getElementById('nav-exhibitions');
-                    if (navEx) navEx.classList.add('active', 'text-gray-900');
-                    const linkEx = document.getElementById('link-do-i-need-to-say');
-                    if (linkEx) linkEx.classList.add('active');
-                } else if (hash === 'i-would-never-remember-2026') {
-                    document.title = `${BASE_TITLE} - i would never remember 2026`;
-                    const navEx = document.getElementById('nav-exhibitions');
-                    if (navEx) navEx.classList.add('active', 'text-gray-900');
-                    const linkEx = document.getElementById('link-i-would-never');
-                    if (linkEx) linkEx.classList.add('active');
-                } else if (hash === 'about' || hash === 'exhibitions') {
-                    document.title = BASE_TITLE;
-                    const navElem = document.getElementById('nav-' + hash);
-                    if (navElem) navElem.classList.add('active', 'text-gray-900');
-                } else {
-                    document.title = BASE_TITLE;
-                }
-            }
-        }
-        
-        const timeDisplay = document.getElementById('time-display');
-        function updateTimer() {
-            const totalElapsedMs = Date.now() - START_TIME;
-            let totalSeconds = Math.floor(totalElapsedMs / 1000);
-            const hours = Math.floor(totalSeconds / 3600);
-            totalSeconds %= 3600;
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            const hundredths = Math.floor((totalElapsedMs % 1000) / 10); 
-            timeDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(hundredths).padStart(2, '0')}`;
-        }
+        navHtml += `<div class="nav-group"><a href="#about" id="nav-about" class="nav-link">about</a></div>`;
+        ROUTES.about = { group: 'about' };
+        nav.innerHTML = navHtml;
 
-        window.addEventListener('hashchange', renderContent);
-        window.onload = function() {
-            renderContent();
-            updateTimer();
-            setInterval(updateTimer, 10);
-        };
+        nav.addEventListener('click', e => {
+            if (e.target.closest('a') && window.innerWidth <= 768) closeMenu();
+        });
+    }
+
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+    function closeMenu() { document.getElementById('sidebar').classList.remove('open'); }
+
+    function renderContent() {
+        let hash = decodeURIComponent(window.location.hash.slice(1)) || 'home';
+        if (!document.getElementById(`${hash}-content`)) hash = 'home';
+
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.nav-link, .nav-item').forEach(l => l.classList.remove('active'));
+        document.getElementById(`${hash}-content`).style.display = 'block';
+
+        const route = ROUTES[hash] || {};
+        if (route.group) document.getElementById(`nav-${route.group}`)?.classList.add('active');
+        if (route.item) document.getElementById(`link-${route.item}`)?.classList.add('active');
+        document.title = route.title ? `${BASE_TITLE} - ${route.title}` : BASE_TITLE;
+        window.scrollTo(0, 0);
+    }
+
+    function updateTimer() {
+        const el = document.getElementById('time-display');
+        if (!el) return;
+        const totalElapsedMs = Date.now() - START_TIME;
+        let totalSeconds = Math.floor(totalElapsedMs / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        totalSeconds %= 3600;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        const hundredths = Math.floor((totalElapsedMs % 1000) / 10);
+        el.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(hundredths).padStart(2, '0')}`;
+    }
+
+    document.getElementById('menu-button').addEventListener('click', toggleMenu);
+    document.getElementById('close-button').addEventListener('click', toggleMenu);
+    window.addEventListener('hashchange', renderContent);
+
+    buildSite();
+    renderContent();
+    updateTimer();
+    setInterval(updateTimer, 10);
     </script>
 </body>
 </html>
