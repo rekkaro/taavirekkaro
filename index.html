@@ -145,8 +145,10 @@
                 position: fixed; top: 0; left: -100%;
                 width: 100%; height: 100%; overflow-y: auto;
                 transition: left 0.3s ease-in-out;
+                z-index: 30;   /* open menu covers the "menu" bar */
             }
             #sidebar.open { left: 0; }
+            .is-home #close-button { display: none; }   /* on the home page the menu stays open */
             #content-area { padding: 1.5rem 1rem 3rem 1rem; }
             .page-title { font-size: 1.5rem; line-height: 2rem; }
             .gallery-img { height: 55vh; max-height: 55vh; }
@@ -204,6 +206,7 @@
 
        Extra options:
          draft: true   -> page works by its link, but is hidden from the menu
+         videos (.mp4) can go in the photo list like any photo; they play muted when on screen
          text: `...`   -> text under the photos (leave out if not needed)
        Order in each list = order in the menu (newest first).
        ===================================================================== */
@@ -360,6 +363,93 @@
         }
     ];
 
+    const SHOWS = [
+        {
+            id: 'fototallinn-2026',
+            menu: 'fotoTallinn 2026',
+            title: 'fotoTallinn, 2026',
+            folder: 'fototallinn',
+            images: [
+                { file: '1.JPG', caption: 'Overview of the booth at Foto Tallinn' },
+                { file: '2.JPG', caption: '“Muhu Traveller” 1/2 & 2/2, diptych, 41 x 30 cm each, 1/5 + 1AP' },
+                { file: '3.JPG', caption: '' },   // <- caption for photo 3 still missing
+                { file: '4.JPG', caption: '“Kura- Stromy Peninsula”, diptych, 82 x 57 cm, 2/5 + 1AP' },
+                { file: '5.JPG', caption: '“NYC Scream”, painting, 6 x 6 cm / 20 x 30 cm' },
+                { file: '6.JPG', caption: 'Close-up of “Muhu Traveller” 1/2' },
+                { file: '7.JPG', caption: '“Needles”' },
+                { file: '8.JPG', caption: '“Kopli Legs 1/2”, diptych, 45 x 30 cm' }
+            ],
+            meta: `
+                <div>
+                    <p class="black">foto tallinn 2026</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>presented artworks from the series “do i need to say it out myself?”</p>
+                    <p>presented at the fair by <span class="black">vasli souza gallery (no)</span></p>
+                    <p class="pt-1 gray">photos by: kunstdok // tor s. ulstein</p>
+                </div>`,
+            text: `
+                <p>At Foto Tallinn, Rekkaro presented a series of “photo sculptures” that challenge conventional interactions between artwork and viewer – reframing photography as something to be touched, and allowing closeness to become part of the experience. Together, the works create a dialogue on distance and intimacy, moments in the everyday, and the ways in which we stay connected.</p>`
+        },
+        {
+            id: 'oslo-negativ-2025',
+            menu: 'oslo negativ 2025',
+            title: 'silent scream, oslo negativ 2025',
+            folder: 'oslo_negativ',
+            images: [
+                { file: 'downstairs amps_aka bitey and beauty, 2025.jpg', caption: '“amps aka bitey and beauty”, 2025, print on silk 150 x 215 cm and a mirror' },
+                { file: 'elevator 1.jpg', caption: '“Silent Scream”, 2025, fabric elevator installation' },
+                { file: 'downstairs installation shot_amps.jpg', caption: 'Installation view, “amps aka bitey and beauty”' },
+                { file: 'elevator 3.jpg', caption: '“Silent Scream”, 2025, inside the elevator with the video controller' },
+                { file: 'double sided - oslo 2.jpg', caption: '“boys” & “and killer legs”, double-sided painting, 71 x 60 cm' },
+                { file: 'double sided - oslo 3.jpg', caption: '“boys” & “and killer legs”, the other side' },
+                { file: 'elevator video.mp4', caption: '“Silent Scream”, 2025, video from the elevator' }
+            ],
+            meta: `
+                <div>
+                    <p class="black">silent scream</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>oslo negativ festival 2025</p>
+                    <p class="black">nasjonalgalleriet, oslo</p>
+                    <p>where munch’s scream was shown before – and at some point also stolen from</p>
+                    <p class="pt-1 gray">photos by: kunstdok // tor s. ulstein</p>
+                </div>`,
+            text: `
+                <p>Please understand,<br>please realise,<br>please, let me be.</p>
+                <p>Why keep fighting yourself - pushing and pushing, trying to get shit done, but all the time fighting with myself. Thinking about it all the time, even when it’s going, going well.</p>
+                <p>If you fall in love you fall in love, you’re just flowing down the river.<br>If a project text is formed in your gut, you only have to sit and let it flow out - just as a passenger, trying to add something of your own.</p>
+                <p>Taavi<br>Taaaaavi, please hear!<br>It’s a silent scream for help.</p>
+                <p>Listen from within - hear what I’d want to say next.<br>What would I say if I weren’t so afraid.<br>You know what I feel, even before I say it anyway.<br>You know - but maybe you don’t get what I couldn’t say.</p>
+                <p>So I try to channel you, to reach you.<br>For those 30 seconds or so in the elevator, we are alone,<br>I look at us, and try to let you hear yourself.</p>
+                <p>I don’t want to be you alone.<br>I don’t want to command you around.</p>
+                <p>Let’s just be.<br>Let me be.<br>I let you be.<br>Let us be.</p>
+
+                <p class="label">works:</p>
+                <div class="credits">
+                    <p class="black normal">silent scream</p>
+                    <p>2025</p>
+                    <p>installation with 90 videos + a video projected on the fabric. fabric “elevator” with a controller to choose between the videos</p>
+                </div>
+                <div class="credits">
+                    <p class="black normal">amps aka bitey and beauty</p>
+                    <p>2025</p>
+                    <p>print on silk 150 x 215 cm and a mirror</p>
+                    <p>photo from the series “praegu on nii”</p>
+                </div>
+                <div class="credits">
+                    <p class="black normal">“boys” & “and killer legs”</p>
+                    <p>double-sided painting</p>
+                    <p>painting on inkjet prints, in see-through frames with glass also on the back. bespoke birch frames from</p>
+                    <p>both — variation #1arles, 2024 / painting, 2025</p>
+                    <p>71 x 60 cm</p>
+                    <p>the paintings were featured in the latest edition of uncertain states scandinavia</p>
+                </div>`
+        }
+    ];
+
     const PROJECTS = [
         { id: 'time', menu: 'time', type: 'time' },
         {
@@ -384,6 +474,7 @@
     const START_TIME = Date.UTC(2024, 11, 8, 10, 56, 0);
     const GROUPS = [
         { key: 'exhibitions', label: 'exhibitions', items: EXHIBITIONS, textLabel: 'exhibition text:' },
+        { key: 'shows', label: 'shows', items: SHOWS, textLabel: 'text:' },
         { key: 'projects', label: 'projects', items: PROJECTS, textLabel: 'text:' }
     ];
     const ROUTES = {};
@@ -425,10 +516,12 @@
         const photos = photosOf(item);
         if (photos.length) {
             const hasCaptions = photos.some(p => p.caption);
-            html += `<div class="gallery${hasCaptions ? ' has-captions' : ''}">` + photos.map((p, i) =>
-                `<figure><img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async"${i > 1 ? ' loading="lazy"' : ''}>` +
-                (p.caption ? `<figcaption>${p.caption}</figcaption>` : '') + `</figure>`
-            ).join('') + `</div>`;
+            html += `<div class="gallery${hasCaptions ? ' has-captions' : ''}">` + photos.map((p, i) => {
+                const media = /\.(mp4|webm|mov)$/i.test(p.src)
+                    ? `<video src="${p.src}#t=0.1" class="gallery-img" muted loop playsinline controls preload="metadata" aria-label="${esc(p.alt)}"></video>`
+                    : `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async"${i > 1 ? ' loading="lazy"' : ''}>`;
+                return `<figure>${media}${p.caption ? `<figcaption>${p.caption}</figcaption>` : ''}</figure>`;
+            }).join('') + `</div>`;
         }
 
         if (item.text) {
@@ -475,6 +568,13 @@
         ROUTES.about = { group: 'about' };
         nav.innerHTML = navHtml;
 
+        // videos play (muted) only while they are on screen
+        const watcher = new IntersectionObserver(entries => entries.forEach(en => {
+            if (en.isIntersecting) en.target.play().catch(() => {});
+            else en.target.pause();
+        }), { threshold: 0.5 });
+        document.querySelectorAll('.gallery video').forEach(v => watcher.observe(v));
+
         nav.addEventListener('click', e => {
             if (e.target.closest('a') && window.innerWidth <= 768) closeMenu();
         });
@@ -495,6 +595,8 @@
         if (route.group) document.getElementById(`nav-${route.group}`)?.classList.add('active');
         if (route.item) document.getElementById(`link-${route.item}`)?.classList.add('active');
         document.title = route.title ? `${BASE_TITLE} - ${route.title}` : BASE_TITLE;
+        document.body.classList.toggle('is-home', hash === 'home');
+        if (hash === 'home' && window.innerWidth <= 768) document.getElementById('sidebar').classList.add('open');
         window.scrollTo(0, 0);
         fitGallery();
     }
