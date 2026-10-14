@@ -85,14 +85,18 @@
             overflow-x: auto; scroll-snap-type: x mandatory;
             padding: 0.25rem 0 0.5rem; width: 100%;
         }
+        .gallery figure { display: flex; flex-direction: column; flex-shrink: 0; scroll-snap-align: start; }
         .gallery-img {
-            height: calc(100vh - 16.5rem);
-            max-height: calc(100vh - 16.5rem);
+            height: var(--img-h, calc(100vh - 16.5rem));   /* --img-h is set by fitGallery() */
+            max-height: var(--img-h, calc(100vh - 16.5rem));
             min-height: 260px;
             width: auto;
             object-fit: contain;
-            flex-shrink: 0;
-            scroll-snap-align: start;
+        }
+        .gallery figcaption {
+            width: 0; min-width: 100%;   /* caption wraps to the photo's width */
+            margin-top: 0.5rem;
+            font-size: 0.75rem; line-height: 1rem; font-weight: 300; color: #6b7280;
         }
 
         .text-block {
@@ -136,6 +140,7 @@
         @media (max-width: 768px) {
             body { padding-top: 3rem; flex-direction: column; }
             #menu-button, #close-button { display: block; }
+            #menu-button { width: 100%; text-align: left; background: #fff; }
             #sidebar {
                 position: fixed; top: 0; left: -100%;
                 width: 100%; height: 100%; overflow-y: auto;
@@ -191,6 +196,11 @@
          images: ['first.jpg', 'second.jpg']      -> shown in this order
          count: 8                                 -> uses 1.jpg, 2.jpg ... 8.jpg
          (add  ext: 'jpeg'  if your files end in .jpeg)
+
+       Captions (small text under a photo):
+         caption: 'text'                          -> same caption under every photo
+         captions: { 'Tallinn': 'text', ... }     -> caption by sub-folder, e.g. 'Tallinn/photo.jpg'
+         { file: 'photo.jpg', caption: 'text' }   -> caption for one photo only
 
        Extra options:
          draft: true   -> page works by its link, but is hidden from the menu
@@ -281,6 +291,72 @@
                 <p class="lc">without writing down, this or these moments would just be lived but forgotten. (it’s also fun to see tor reacting to his past thoughts.</p>
                 <p class="lc">for taavi, catching moments is sacred. how can you be sure you even were there - did these moments truly exist? what have you lost if they get mangled up or simply forgotten?</p>
                 <p class="lc">in his process taavi is trying to catch fleeting moments like these - whether they come in the shape of photos, quotes, texts, paintings, sculptures or pieces of tape. presented in vasli souza, båstad, is a similar dissolving snapshot of taavi’s ongoing project, consisting of photos and sculptures starting from 2023. captured moments of good friends, places full of emotions and just trying to feel alive or just a bit happy.</p>`
+        },
+        {
+            id: 'thanks',
+            menu: 'thanks for everything 2022-2024',
+            title: 'thanks for everything, 2022-2024',
+            folder: 'thanks',
+            captions: {
+                'Tallinn': 'Tallinn 2022 - photo by Hedi Jaansoo',
+                'Tartu': 'Tartu 2023 - photo by Joosep Kivimäe',
+                'Oslo': 'Oslo 2024 - photo by Kunstdok // Tor Simen Ulstein'
+            },
+            images: [
+                'Tallinn/aitah_Hedi-Jaansoo_2.jpg',
+                { file: 'Taavi-Rekkaro_draakoni_plakat.jpg', caption: 'Poster by Kert Viiart' },
+                'Tallinn/aitah_Hedi-Jaansoo_6.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_16.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_19.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_20.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_27.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-3.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-5.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-6.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-7.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-14.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-19.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-29.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_02.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_03.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_04.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_05.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_06.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_10.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_12.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_13.jpg'
+            ],
+            meta: `
+                <div>
+                    <p class="black">thanks for everything / aitäh kõige eest</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>draakoni gallery, tallinn, estonia, 14.12-07.01.2023</p>
+                    <p>monumental gallery, tartu, estonia, 14.10-12.11.2023</p>
+                    <p>vasli souza, oslo, norway, 1.03-24.03.2024</p>
+                    <p class="pt-1 gray">exhibition text - joonas veelmaa<br>graphic design - kert viiart</p>
+                </div>`,
+            text: `
+                <p>When a long-term relationship suddenly ends, the artist discovers himself in a complete emptiness. His partner takes all her things and when she leaves then all the meanings leave with her.</p>
+                <p>Only the good-bye message “thanks for everything” left on the mirror reminds the artist of the fact that a certain world has existed somewhere at some time before. From the mirror, I am facing life that seems to have failed for good. I have studied a specialty that is now just a diploma for me and not my calling. My long-time loved one has found herself a better partner. My room is empty.</p>
+                <p>What would be your last straw if you'd lose everything?</p>
+                <p>A journey of a drowning man begins where art serves as the last tower of strength instead of self-expression. A lifebuoy to which to cling. Documenting self-pity, implacability, fussiness and growth is a path that one can follow only alone.</p>
+                <p>What does the drowning man see?<br>
+                   Winter reflecting from the books of the former loved one.<br>
+                   The undone bed that still remembers the warmth of the partner who has left.<br>
+                   Frames turned upside down, taken off the wall but that have not left the room.<br>
+                   Incoherent pain that wants to become words.</p>
+                <p>But also the study material for growing plants and survival drive.</p>
+                <p>This is letting go and recording of letting go.</p>
+                <p>Being reborn while wishing to bring the old life with me. Moving along the circle and hoping that it is a spiral. Perhaps it is?</p>
+                <div class="quote">
+                    <p>thank you for leaving me in darkness<br>thank you for teaching me how to breathe</p>
+                    <p>thank you for getting and giving and getting everything<br>with you</p>
+                    <p>I am angry happy<br>I will never make peace and<br>I have already forgiven</p>
+                    <p>thank you for everything</p>
+                </div>
+                <p class="xs gray">exhibition text: Joonas Veelmaa</p>`
         }
     ];
 
@@ -296,12 +372,6 @@
             id: 'silent-scream',
             menu: 'silent scream - 2025',
             folder: 'silent-scream',
-            images: []
-        },
-        {
-            id: 'thanks',
-            menu: 'thanks for everything',
-            folder: 'thanks',
             images: []
         }
     ];
@@ -326,9 +396,15 @@
             list = Array.from({ length: item.count }, (_, i) => `${i + 1}.${item.ext || 'jpg'}`);
         }
         return list.map((entry, i) => {
-            const file = typeof entry === 'string' ? entry : entry.file;
-            const alt = typeof entry === 'string' ? `${item.menu} - ${i + 1}` : entry.alt;
-            return { src: encodeURI(item.folder ? `${item.folder}/${file}` : file), alt: `taavi rekkaro - ${alt}` };
+            const e = typeof entry === 'string' ? { file: entry } : entry;
+            const sub = e.file.includes('/') ? e.file.split('/')[0] : '';
+            const caption = e.caption ?? (item.captions || {})[sub] ?? item.caption ?? '';
+            const alt = e.alt || `${item.menu} - ${caption || i + 1}`;
+            return {
+                src: encodeURI(item.folder ? `${item.folder}/${e.file}` : e.file),
+                alt: `taavi rekkaro - ${alt}`,
+                caption
+            };
         });
     }
 
@@ -348,8 +424,10 @@
 
         const photos = photosOf(item);
         if (photos.length) {
-            html += `<div class="gallery">` + photos.map((p, i) =>
-                `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async"${i > 1 ? ' loading="lazy"' : ''}>`
+            const hasCaptions = photos.some(p => p.caption);
+            html += `<div class="gallery${hasCaptions ? ' has-captions' : ''}">` + photos.map((p, i) =>
+                `<figure><img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async"${i > 1 ? ' loading="lazy"' : ''}>` +
+                (p.caption ? `<figcaption>${p.caption}</figcaption>` : '') + `</figure>`
             ).join('') + `</div>`;
         }
 
@@ -418,6 +496,17 @@
         if (route.item) document.getElementById(`link-${route.item}`)?.classList.add('active');
         document.title = route.title ? `${BASE_TITLE} - ${route.title}` : BASE_TITLE;
         window.scrollTo(0, 0);
+        fitGallery();
+    }
+
+    // make photos (and their captions) fill the space left below the title and info
+    function fitGallery() {
+        document.querySelectorAll('.gallery').forEach(g => {
+            if (!g.offsetParent || window.innerWidth <= 768) return;
+            const top = g.getBoundingClientRect().top + window.scrollY;
+            const room = g.classList.contains('has-captions') ? 64 : 40;
+            g.style.setProperty('--img-h', Math.max(260, window.innerHeight - top - room) + 'px');
+        });
     }
 
     function updateTimer() {
@@ -436,6 +525,7 @@
     document.getElementById('menu-button').addEventListener('click', toggleMenu);
     document.getElementById('close-button').addEventListener('click', toggleMenu);
     window.addEventListener('hashchange', renderContent);
+    window.addEventListener('resize', fitGallery);
 
     buildSite();
     renderContent();
