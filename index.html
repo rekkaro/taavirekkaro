@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>taavi rekkaro</title>
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Official website and portfolio of taavi rekkaro, a multidisciplinary artist working with installation and conceptual media.">
+    <meta name="description" content="Taavi Rekkaro (EE, b. 1988) is a mixed media artist working in an intuitive dialogue between painting and photography.">
     <meta name="keywords" content="taavi rekkaro, conceptual artist, installation art, fine art, tallinn, time project">
     <link rel="canonical" href="https://taavirekkaro.com/">
 
@@ -126,6 +126,15 @@
         .index > * + * { margin-top: 0.5rem; }
         .index a:hover { text-decoration: underline; }
 
+        .gallery .embed { height: var(--img-h, calc(100vh - 16.5rem)); min-height: 260px; width: auto; aspect-ratio: 16 / 9; border: 0; background: #f3f4f6; }
+
+        .cv { margin-top: 3rem; max-width: 42rem; font-size: 0.875rem; line-height: 1.625; font-weight: 300; color: #374151; }
+        .cv h3 { margin: 2.5rem 0 0.75rem; font-size: 0.875rem; font-weight: 400; color: #000; text-transform: lowercase; }
+        .cv h3:first-child { margin-top: 0; }
+        .cv-row { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: 0.375rem 0; border-top: 1px solid #f3f4f6; }
+        .cv-row .when { color: #6b7280; }
+        .cv a { color: #000; text-decoration: underline; text-decoration-color: #d1d5db; text-underline-offset: 2px; }
+        .cv a:hover { text-decoration-color: #000; }
         .about-body { max-width: 42rem; color: #374151; }
         .about-body > * + * { margin-top: 1rem; }
         .email { padding-top: 1rem; font-size: 0.875rem; line-height: 1.25rem; color: #000; }
@@ -152,6 +161,8 @@
             #content-area { padding: 1.5rem 1rem 3rem 1rem; }
             .page-title { font-size: 1.5rem; line-height: 2rem; }
             .gallery-img { height: 55vh; max-height: 55vh; }
+            .gallery .embed { width: calc(100vw - 2rem); height: auto; min-height: 0; }
+            .cv-row { grid-template-columns: 1fr; gap: 0; }
         }
 
         /* ---------- minimal scrollbars ---------- */
@@ -178,8 +189,40 @@
         <section id="about-content" class="content-section">
             <h2 class="page-title spaced">about</h2>
             <div class="about-body">
-                <p>Taavi Rekkaro (b. 1988, Estonia) studied printmaking at Estonian Academy of Arts. He is working to explore connections between painting and photography while trying to avoid any writing.</p>
+                <p>Taavi Rekkaro (EE, b. 1988) is a mixed media artist whose work reflects an intuitive dialogue between visual art and photography. Combining images with physical materials, he seeks to capture the energy of fleeting moments, blurring the lines between memory and self-discovery. Rekkaro has shown his work internationally at exhibitions and art fairs, and it has been featured in international publications.</p>
                 <p class="email"><a href="mailto:something@taavirekkaro.com">something@taavirekkaro.com</a></p>
+            </div>
+
+            <div class="cv">
+                <h3>education</h3>
+                <div class="cv-row"><span class="when">2019–</span><span>University of Tartu – MA, Conversion Master</span></div>
+                <div class="cv-row"><span class="when">2007–2012</span><span>Estonian Academy of Arts – BA, Contemporary Art, Printmaking</span></div>
+
+                <h3>upcoming exhibitions</h3>
+                <div class="cv-row"><span class="when">November 2026</span><span>Group show at Skog Art Gallery, Oslo, Norway</span></div>
+                <div class="cv-row"><span class="when">October 2027</span><span>Group show with ADEY, The Hays, Tor Simen Ulstein and Maria Di Stefano at Romsdal Kunstsenter, Molde, Norway</span></div>
+
+                <h3>past exhibitions</h3>
+                <div class="cv-row"><span class="when">September 2026</span><span><a href="#fototallinn-2026">Foto Tallinn art fair</a>, Kai Art Center, with Vasli Souza Gallery</span></div>
+                <div class="cv-row"><span class="when">August 2026</span><span>Solo show – <a href="#do-i-need-to-say-it-out-myself-2026">“do i need to say it out myself?”</a>, FOKU Gallery, Tallinn, Estonia</span></div>
+                <div class="cv-row"><span class="when">July 2026</span><span>Solo show – <a href="#i-would-never-remember-2026">“i would never remember saying something so stupid”</a>, Vasli Souza, Båstad, Sweden</span></div>
+                <div class="cv-row"><span class="when">October 2025</span><span><a href="#oslo-negativ-2025">Oslo Negativ Festival</a> – solo room with Vasli Souza Gallery</span></div>
+                <div class="cv-row"><span class="when">April 2025</span><span>Supermarket Art Fair, Stockholm – <a href="#all-a-day">video installation</a> presented with Uncertain States Scandinavia</span></div>
+                <div class="cv-row"><span class="when">March 2024</span><span>Solo show – <a href="#thanks">“thanks for everything”</a>, Vasli Souza Gallery, Oslo, Norway</span></div>
+                <div class="cv-row"><span class="when">March 2024</span><span>Group show – “Enese õrnad žestid”, EKA Gallery, Tallinn, Estonia</span></div>
+                <div class="cv-row"><span class="when">October 2023</span><span>Solo show – <a href="#thanks">“thanks for everything”</a>, Monumental Gallery, Tartu Art House, Estonia</span></div>
+                <div class="cv-row"><span class="when">May 2023</span><span>Group show – “In the Defense of Love” by Uncertain States Scandinavia, Fotografihuset, Oslo</span></div>
+                <div class="cv-row"><span class="when">March 2023</span><span>Performing arts festival “Made in Estonia Marathon” – “Bänger”, together with Nele Tiidelepp, Riin Maide, Jarmo Reha and others</span></div>
+                <div class="cv-row"><span class="when">December 2022</span><span>Solo show – <a href="#thanks">“thanks for everything”</a>, Draakoni Gallery, Tallinn, Estonia</span></div>
+                <div class="cv-row"><span class="when">June 2022</span><span>Group show – “Kevadnäitus”, Tallinn Art Hall, Estonia</span></div>
+                <div class="cv-row"><span class="when">March 2022</span><span>Performing arts festival “Made in Estonia” – “Don’t Scratch”, together with Tormi Torop</span></div>
+
+                <h3>publications</h3>
+                <div class="cv-row"><span class="when">2025</span><span>starter-KIT, issue 2 – “LOVE IS DIASEL”</span></div>
+                <div class="cv-row"><span class="when">2025</span><span>Uncertain States Scandinavia, issue 23 – Stockholm Supermarket issue</span></div>
+                <div class="cv-row"><span class="when">2023</span><span>“Thanks for Everything” – artist book, edition of 49</span></div>
+                <div class="cv-row"><span class="when">2023</span><span>Uncertain States Scandinavia, issue 19 – “2023”</span></div>
+                <div class="cv-row"><span class="when">2022</span><span>Uncertain States Scandinavia, issue 16.5 – “2022”</span></div>
             </div>
         </section>
         <!-- exhibition and project pages are built automatically from the lists below -->
@@ -207,6 +250,7 @@
        Extra options:
          draft: true   -> page works by its link, but is hidden from the menu
          videos (.mp4) can go in the photo list like any photo; they play muted when on screen
+         YouTube videos:  { youtube: 'ZqjNwTbqiH8', caption: 'text' }   (the code after youtu.be/)
          text: `...`   -> text under the photos (leave out if not needed)
        Order in each list = order in the menu (newest first).
        ===================================================================== */
@@ -301,9 +345,9 @@
             title: 'thanks for everything, 2022-2024',
             folder: 'thanks',
             captions: {
-                'Tallinn': 'Tallinn 2022 - photo by Hedi Jaansoo',
-                'Tartu': 'Tartu 2023 - photo by Joosep Kivimäe',
-                'Oslo': 'Oslo 2024 - photo by Kunstdok // Tor Simen Ulstein'
+                'Tallinn': 'Tallinn 2022 - installation photos by Hedi Jaansoo',
+                'Tartu': 'Tartu 2023 - installation photos by Joosep Kivimäe',
+                'Oslo': 'Oslo 2024 - installation photos by Kunstdok // Tor Simen Ulstein'
             },
             images: [
                 'Tallinn/aitah_Hedi-Jaansoo_2.jpg',
@@ -373,7 +417,7 @@
                 { file: '1.jpg', caption: 'Overview of the booth at Foto Tallinn' },
                 { file: '2.jpg', caption: '“Muhu Traveller” 1/2 & 2/2, diptych, 41 x 30 cm each, 1/5 + 1AP' },
                 { file: '3.JPG', caption: '' },   // <- caption for photo 3 still missing
-                { file: '4.JPG', caption: '“Kura- Stromy Peninsula”, diptych, 82 x 57 cm, 2/5 + 1AP' },
+                { file: '4.JPG', caption: '“Kura – Stormy Peninsula”, diptych, 82 x 57 cm, 2/5 + 1AP' },
                 { file: '5.JPG', caption: '“NYC Scream”, painting, 6 x 6 cm / 20 x 30 cm' },
                 { file: '6.JPG', caption: 'Close-up of “Muhu Traveller” 1/2' },
                 { file: '7.JPG', caption: '“Needles”' },
@@ -387,7 +431,7 @@
                 <div class="details">
                     <p>presented artworks from the series “do i need to say it out myself?”</p>
                     <p>presented at the fair by <span class="black">vasli souza gallery (no)</span></p>
-                    <p class="pt-1 gray">photos by: kunstdok // tor s. ulstein</p>
+                    <p class="pt-1 gray">installation photos by: kunstdok // tor s. ulstein</p>
                 </div>`,
             text: `
                 <p>At Foto Tallinn, Rekkaro presented a series of “photo sculptures” that challenge conventional interactions between artwork and viewer – reframing photography as something to be touched, and allowing closeness to become part of the experience. Together, the works create a dialogue on distance and intimacy, moments in the everyday, and the ways in which we stay connected.</p>`
@@ -414,8 +458,8 @@
                 <div class="details">
                     <p>oslo negativ festival 2025</p>
                     <p class="black">nasjonalgalleriet, oslo</p>
-                    <p>where munch’s scream was shown before – and at some point also stolen from</p>
-                    <p class="pt-1 gray">photos by: kunstdok // tor s. ulstein</p>
+                    <p>where Munch’s Scream was shown before – and at some point also stolen from</p>
+                    <p class="pt-1 gray">installation photos by: Daniela Fribel & Taavi Rekkaro</p>
                 </div>`,
             text: `
                 <p>Please understand,<br>please realise,<br>please, let me be.</p>
@@ -442,27 +486,97 @@
                 <div class="credits">
                     <p class="black normal">“boys” & “and killer legs”</p>
                     <p>double-sided painting</p>
-                    <p>painting on inkjet prints, in see-through frames with glass also on the back. bespoke birch frames from</p>
-                    <p>both — variation #1arles, 2024 / painting, 2025</p>
+                    <p>painting on inkjet prints, in see-through frames with glass also on the back. bespoke birch frames from artproof.</p>
+                    <p>both — variation #1, arles, 2024 / painting, 2025</p>
                     <p>71 x 60 cm</p>
                     <p>the paintings were featured in the latest edition of uncertain states scandinavia</p>
                 </div>`
+        },
+        {
+            id: 'all-a-day',
+            menu: "it's all a day 2025",
+            title: "“it's all a day”, 2025",
+            folder: 'all_a_day',
+            caption: "“it's all a day”, 2025, sample still",
+            images: [
+                { youtube: 'ZqjNwTbqiH8', caption: "“it's all a day”, 2025, video" },
+                'sample stills - its all a day - 1.JPG',
+                'sample stills - its all a day - 2.JPG',
+                'sample stills - its all a day - 3.JPG',
+                'sample stills - its all a day - 4.JPG',
+                'sample stills - its all a day - 5.JPG',
+                'sample stills - its all a day - 6.JPG',
+                'sample stills - its all a day - 7.JPG',
+                'sample stills - its all a day - 8.JPG',
+                'sample stills - its all a day - 9.JPG',
+                'sample stills - its all a day - 10.JPG',
+                'sample stills - its all a day - 11.JPG',
+                'sample stills - its all a day - 12.JPG',
+                'sample stills - its all a day - 13.JPG',
+                'sample stills - its all a day - 14.JPG',
+                'sample stills - its all a day - 15.JPG'
+            ],
+            meta: `
+                <div>
+                    <p class="black">“it's all a day”</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>66 photographs combined with 99 unique paintings, original size 21 x 25 cm</p>
+                    <p>video presented at <span class="black">supermarket art fair 2025, stockholm</span></p>
+                    <p>featured in uncertain states scandinavia, issue 23</p>
+                </div>`,
+            text: `
+                <p>A moment grabs your attention, points, and asks you to capture its passing – to photograph it. These moments might feel fleeting or empty, but you just have to trust the process. The unconscious conspires with the subconscious world. We see, but we need help to truly see, to try to understand.</p>
+                <p>Combining photography with single-session action painting makes it possible to stretch out the moment, to return to it and combine it with new experiences. Creating other worlds, another possibility of life, a chance for new energy to flow from the fleeting memory of what once was.</p>
+                <p>“it's all a day” consists of 66 photographs combined with 99 unique paintings, each originally 21 x 25 cm. The series can also be presented as large-format reprints.</p>
+                <p>The video was presented at Supermarket Art Fair 2025 in Stockholm and featured in Uncertain States Scandinavia, issue 23.</p>`
         }
     ];
 
     const PROJECTS = [
         { id: 'time', menu: 'time', type: 'time' },
         {
-            id: 'all-a-day',
-            menu: "it's all a day - 2025",
-            folder: 'all-a-day',
-            images: []        // add photo file names here, or use  count: 10
-        },
-        {
-            id: 'silent-scream',
-            menu: 'silent scream - 2025',
-            folder: 'silent-scream',
-            images: []
+            id: 'for-now',
+            menu: 'for now, this is how it is 2025–',
+            title: '“for now, this is how it is”, 2025–',
+            folder: 'for_now',
+            images: [
+                { file: '01_scream2_ sto_150x110cm_2025.jpg', caption: '“Scream 2, Sto”, 2025, 150 x 110 cm, unique' },
+                { file: '03_answer to nyc_london_100x150cm_2025.jpg', caption: '“Answer to NYC, London”, 2025, 100 x 150 cm, unique' },
+                { file: '03_naked in cph_150x110cm_2024.jpg', caption: '“Naked in CPH”, 2024, 150 x 110 cm, unique' },
+                { file: '05_The worst thing I_ve ever done__160x102cm_2024.jpg', caption: '“The Worst Thing I’ve Ever Done”, 2024, 160 x 102 cm, unique' },
+                { file: '06_scream and the city_150x110cm_2025.jpg', caption: '“Scream and the City”, 2025, 150 x 110 cm, unique' },
+                { file: '07_isn_t it clear_150x210cm_2025.jpg', caption: '“Isn’t It Clear”, 2025, 150 x 210 cm, unique' },
+                { file: '07_nyc_150x110cm_2025.jpg', caption: '“NYC”, 2025, 150 x 110 cm, unique' },
+                { file: '08_five men_150x400cm_2025.jpg', caption: '“Five Men”, 2025, 150 x 400 cm, unique' },
+                { file: '08_scream1 berlin_100x70cm_2025.jpg', caption: '“Scream 1, Berlin”, 2025, 100 x 70 cm, unique' },
+                { file: '09_from inside_100x140cm_2025.jpg', caption: '“From Inside”, 2025, 100 x 140 cm, unique' },
+                { file: '13_us_100x70cm_2025.jpg', caption: '“Us”, 2025, 100 x 70 cm, unique' },
+                { file: '15_100x70cm_2025.jpg', caption: '“Untitled”, 2025, 100 x 70 cm, unique' },
+                { file: '16_rabbit_100x140cm_2025.jpg', caption: '“Rabbit”, 2025, 100 x 140 cm, unique' },
+                { file: '17_i didn_t want to do it_2025.jpg', caption: '“I Didn’t Want to Do It”, 2025, unique' },
+                { file: '18_i didn_t want to do it 2_2025.jpg', caption: '“I Didn’t Want to Do It 2”, 2025, unique' }
+            ],
+            meta: `
+                <div>
+                    <p class="black">“for now, this is how it is”</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>photos printed on watercolor paper and painted with watercolors</p>
+                    <p>ongoing project, 2025–</p>
+                    <p class="gray">not yet exhibited</p>
+                </div>`,
+            text: `
+                <p>In “for now, this is how it is”, Taavi Rekkaro works with emotions through photography and performative painting, which become a kind of meditation, a search for a narrative in his confusion. He moves between different hidden pains and moments, guided by moods, photographs, the painting and movement. What flows out creates new worlds based on the essence of his current state, as purely and with as little interference as possible.</p>
+                <p>He approaches his art with a kind of peasant stubbornness – not solving the world’s problems or offering explanations. Leaving aside the art world and philosophy allows him to push and paint color onto his photos until something arrives. Combining photos with forceful painting, he leaves little room for himself or the viewer. The artworks start to act like a Baroque painting: they feel very busy, but if you look closely, you always find new scenarios to create and to let yourself follow.</p>
+                <p>Looking for answers through anger, he uses art as revenge for being alone, pushing even deeper into his own inner world. As revenge, he lets the subconscious point the camera, allowing the body and the moment to guide the flow. While painting, he stays present until a connection is made, only trying to grab color and water with the brush.</p>
+                <p>While photographing, he tries not to interrupt the emotion and to preserve as much of the original energy as possible – the moment when the artist and that elusive “something” are both present in pure form. In that moment, emotion and the energy of worlds meet. This is his way of channelling moments from the universe, of sensing something profoundly deep from which to search for himself.</p>
+                <p>Performative painting, shifting between abstraction and figurative forms inspired by photographic details, is for him like emotion itself. While painting, the emotions are wet, full of contrast and active, but as they dry, they recede into the background and get forgotten. What’s left is just the memory of something very strong that life later softens a little.</p>
+                <p>This is an ongoing project, with new combinations of photos and paintings constantly being worked on.</p>
+                <p class="label">practical part:</p>
+                <p>If possible, I would like to show the original photo-paintings. Another option is to rephotograph them and create a site-specific solution that fits the room.</p>`
         }
     ];
 
@@ -488,6 +602,7 @@
         }
         return list.map((entry, i) => {
             const e = typeof entry === 'string' ? { file: entry } : entry;
+            if (e.youtube) return { youtube: e.youtube, caption: e.caption || '', alt: `taavi rekkaro - ${item.menu} - video` };
             const sub = e.file.includes('/') ? e.file.split('/')[0] : '';
             const caption = e.caption ?? (item.captions || {})[sub] ?? item.caption ?? '';
             const alt = e.alt || `${item.menu} - ${caption || i + 1}`;
@@ -524,7 +639,9 @@
         if (photos.length) {
             const hasCaptions = photos.some(p => p.caption);
             html += `<div class="gallery${hasCaptions ? ' has-captions' : ''}">` + photos.map((p, i) => {
-                const media = /\.(mp4|webm|mov)$/i.test(p.src)
+                const media = p.youtube
+                    ? `<iframe class="embed" src="https://www.youtube-nocookie.com/embed/${p.youtube}?rel=0" title="${esc(p.alt)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`
+                    : /\.(mp4|webm|mov)$/i.test(p.src)
                     ? `<video src="${p.src}#t=0.1" class="gallery-img" muted loop playsinline controls preload="metadata" aria-label="${esc(p.alt)}"></video>`
                     : `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async" onerror="tryOtherCase(this)"${i > 1 ? ' loading="lazy"' : ''}>`;
                 return `<figure>${media}${p.caption ? `<figcaption>${p.caption}</figcaption>` : ''}</figure>`;
@@ -591,7 +708,9 @@
     function closeMenu() { document.getElementById('sidebar').classList.remove('open'); }
 
     function renderContent() {
+        const OLD_LINKS = { 'silent-scream': 'oslo-negativ-2025' };   // removed pages -> where they went
         let hash = decodeURIComponent(window.location.hash.slice(1)) || 'home';
+        if (OLD_LINKS[hash]) { history.replaceState(null, '', '#' + OLD_LINKS[hash]); hash = OLD_LINKS[hash]; }
         if (!document.getElementById(`${hash}-content`)) hash = 'home';
 
         document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
