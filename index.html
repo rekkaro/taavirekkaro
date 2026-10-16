@@ -44,6 +44,9 @@
             background: #fff;
             padding: 2rem;
             border-right: 1px solid #f3f4f6;
+            align-self: flex-start;   /* menu stays on screen while the page scrolls */
+            height: 100vh;
+            overflow-y: auto;
         }
         #sidebar h1 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 2rem; text-transform: lowercase; }
         .nav-group + .nav-group { margin-top: 1rem; }
@@ -67,6 +70,9 @@
         /* ---------- content ---------- */
         #content-area { flex-grow: 1; min-width: 0; width: 100%; padding: 3rem 6rem; }
         .content-section { display: none; }
+        /* one long page: every page shown, one after another */
+        .one-page .content-section { display: block; }
+        .one-page .content-section + .content-section { padding-top: 3rem; border-top: 1px solid #f3f4f6; }
 
         .page-title { font-size: 1.875rem; line-height: 2.25rem; font-weight: 300; text-transform: lowercase; margin-bottom: 0.75rem; }
         .page-title.spaced { margin-bottom: 4rem; }
@@ -85,6 +91,7 @@
             overflow-x: auto; scroll-snap-type: x mandatory;
             padding: 0.25rem 0 0.5rem; width: 100%;
         }
+        .gallery { align-items: center; }   /* photos of different shapes sit centred in height */
         .gallery figure { display: flex; flex-direction: column; flex-shrink: 0; scroll-snap-align: start; }
         .gallery-img {
             height: var(--img-h, calc(100vh - 16.5rem));   /* --img-h is set by fitGallery() */
@@ -96,6 +103,7 @@
         .gallery figcaption {
             width: 0; min-width: 100%;   /* caption wraps to the photo's width */
             margin-top: 0.5rem;
+            height: 2rem; overflow: hidden;   /* room for two lines, so the page doesn't jump while photos load */
             font-size: 0.75rem; line-height: 1rem; font-weight: 300; color: #6b7280;
         }
 
@@ -160,9 +168,11 @@
             .is-home #close-button { display: none; }   /* on the home page the menu stays open */
             #content-area { padding: 1.5rem 1rem 3rem 1rem; }
             .page-title { font-size: 1.5rem; line-height: 2rem; }
-            /* phone: landscape photos max 90% of the screen width, portrait max 55% of the height */
-            .gallery-img { width: auto; height: auto; min-height: 0; max-width: 90vw; max-height: 55vh; }
-            .gallery .embed { width: 90vw; height: auto; min-height: 0; }
+            /* phone: landscape photos max 110% of the screen width, portrait max 55% of the height.
+               The gallery keeps one fixed height, so every photo sits centred in it. */
+            .gallery { height: calc(55vh + 3.25rem); }
+            .gallery-img { width: auto; height: auto; min-height: 0; max-width: 110vw; max-height: 55vh; }
+            .gallery .embed { width: calc(100vw - 2rem); height: auto; min-height: 0; }
             .cv-row { grid-template-columns: 1fr; gap: 0; }
         }
 
@@ -255,6 +265,10 @@
          text: `...`   -> text under the photos (leave out if not needed)
        Order in each list = order in the menu (newest first).
        ===================================================================== */
+
+    // true  = all pages on one long page, the menu jumps to the right place
+    // false = one page at a time (the way it was before)
+    const ONE_PAGE = true;
 
     const EXHIBITIONS = [
         {
@@ -593,6 +607,7 @@
         { key: 'projects', label: 'projects', items: PROJECTS, textLabel: 'text:' }
     ];
     const ROUTES = {};
+    let eagerLeft = 2;   // only the first photos of the site load right away, the rest when you get near them
 
     const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
@@ -644,7 +659,7 @@
                     ? `<iframe class="embed" src="https://www.youtube-nocookie.com/embed/${p.youtube}?rel=0" title="${esc(p.alt)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`
                     : /\.(mp4|webm|mov)$/i.test(p.src)
                     ? `<video src="${p.src}#t=0.1" class="gallery-img" muted loop playsinline controls preload="metadata" aria-label="${esc(p.alt)}"></video>`
-                    : `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async" onerror="tryOtherCase(this)"${i > 1 ? ' loading="lazy"' : ''}>`;
+                    : `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async" onerror="tryOtherCase(this)"${eagerLeft-- > 0 ? '' : ' loading="lazy"'}>`;
                 return `<figure>${media}${p.caption ? `<figcaption>${p.caption}</figcaption>` : ''}</figure>`;
             }).join('') + `</div>`;
         }
@@ -667,23 +682,30 @@
         return section;
     }
 
+    const OLD_LINKS = { 'silent-scream': 'oslo-negativ-2025' };   // removed pages -> where they went
+
     function buildSite() {
         const nav = document.getElementById('nav');
         const main = document.getElementById('content-area');
         const about = document.getElementById('about-content');
         let navHtml = '';
+        document.body.classList.toggle('one-page', ONE_PAGE);
+        if (ONE_PAGE) document.getElementById('home-content').remove();
 
         GROUPS.forEach(group => {
             const visible = group.items.filter(it => !it.draft);
+            // on the one long page, "exhibitions" etc. jump to the first page of that group
+            const groupHref = ONE_PAGE && visible.length ? visible[0].id : group.key;
+            if (ONE_PAGE && visible.length) OLD_LINKS[group.key] = visible[0].id;
             navHtml += `<div class="nav-group">
-                <a href="#${group.key}" id="nav-${group.key}" class="nav-link">${group.label}</a>
+                <a href="#${groupHref}" id="nav-${group.key}" class="nav-link">${group.label}</a>
                 <ul class="nav-list">${visible.map(it =>
                     `<li><a href="#${it.id}" id="link-${it.id}" class="nav-item">${it.menu}</a></li>`).join('')}
                 </ul></div>`;
 
-            main.insertBefore(buildOverview(group, visible), about);
+            if (!ONE_PAGE) main.insertBefore(buildOverview(group, visible), about);
             ROUTES[group.key] = { group: group.key };
-            group.items.forEach(item => {
+            (ONE_PAGE ? visible : group.items).forEach(item => {
                 main.insertBefore(buildPage(item, group), about);
                 ROUTES[item.id] = { group: group.key, item: item.id, title: item.menu };
             });
@@ -703,36 +725,83 @@
         nav.addEventListener('click', e => {
             if (e.target.closest('a') && window.innerWidth <= 768) closeMenu();
         });
+
+        if (ONE_PAGE) {
+            // every #link on the page (menu, CV) glides to its place instead of reloading
+            document.addEventListener('click', e => {
+                const a = e.target.closest('a[href^="#"]');
+                if (!a) return;
+                e.preventDefault();
+                const id = resolve(a.getAttribute('href').slice(1));
+                history.replaceState(null, '', '#' + id);
+                scrollToPage(id, true);
+            });
+            watchScrolling();
+        }
     }
 
     function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
     function closeMenu() { document.getElementById('sidebar').classList.remove('open'); }
 
-    function renderContent() {
-        const OLD_LINKS = { 'silent-scream': 'oslo-negativ-2025' };   // removed pages -> where they went
-        let hash = decodeURIComponent(window.location.hash.slice(1)) || 'home';
-        if (OLD_LINKS[hash]) { history.replaceState(null, '', '#' + OLD_LINKS[hash]); hash = OLD_LINKS[hash]; }
-        if (!document.getElementById(`${hash}-content`)) hash = 'home';
+    function resolve(hash) {
+        hash = OLD_LINKS[hash] || hash;
+        return document.getElementById(`${hash}-content`) ? hash : 'home';
+    }
 
-        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+    function markActive(id) {
         document.querySelectorAll('.nav-link, .nav-item').forEach(l => l.classList.remove('active'));
-        document.getElementById(`${hash}-content`).style.display = 'block';
-
-        const route = ROUTES[hash] || {};
+        const route = ROUTES[id] || {};
         if (route.group) document.getElementById(`nav-${route.group}`)?.classList.add('active');
         if (route.item) document.getElementById(`link-${route.item}`)?.classList.add('active');
         document.title = route.title ? `${BASE_TITLE} - ${route.title}` : BASE_TITLE;
-        document.body.classList.toggle('is-home', hash === 'home');
-        if (hash === 'home' && window.innerWidth <= 768) document.getElementById('sidebar').classList.add('open');
-        window.scrollTo(0, 0);
-        fitGallery();
     }
 
-    // make photos (and their captions) fill the space left below the title and info
+    // space between the top of the screen and a page title
+    const topGap = () => (window.innerWidth <= 768 ? 72 : 48);
+
+    function scrollToPage(id, smooth) {
+        const title = document.querySelector(`#${id}-content .page-title`);
+        const y = title && id !== 'home' ? title.getBoundingClientRect().top + window.scrollY - topGap() : 0;
+        window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto' });
+        markActive(id);
+    }
+
+    // one long page: the menu follows along while scrolling
+    function watchScrolling() {
+        const spy = new IntersectionObserver(entries => entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            const id = en.target.id.replace(/-content$/, '');
+            markActive(id);
+            if (decodeURIComponent(location.hash.slice(1)) !== id) history.replaceState(null, '', '#' + id);
+        }), { rootMargin: '-35% 0px -60% 0px' });
+        document.querySelectorAll('.content-section').forEach(sec => { if (sec.id !== 'home-content') spy.observe(sec); });
+    }
+
+    function renderContent() {
+        let raw = decodeURIComponent(window.location.hash.slice(1));
+        const hash = resolve(raw || 'home');
+        if (raw && raw !== hash && hash !== 'home') history.replaceState(null, '', '#' + hash);
+
+        if (ONE_PAGE) {
+            fitGallery();
+            scrollToPage(hash, false);
+        } else {
+            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+            document.getElementById(`${hash}-content`).style.display = 'block';
+            document.body.classList.toggle('is-home', hash === 'home');
+            markActive(hash);
+            window.scrollTo(0, 0);
+            fitGallery();
+        }
+        if (!raw && window.innerWidth <= 768) document.getElementById('sidebar').classList.add('open');
+    }
+
+    // make photos (and their captions) fill the screen below the title and info
     function fitGallery() {
         document.querySelectorAll('.gallery').forEach(g => {
             if (!g.offsetParent || window.innerWidth <= 768) return;
-            const top = g.getBoundingClientRect().top + window.scrollY;
+            const title = g.closest('.content-section').querySelector('.page-title');
+            const top = topGap() + g.getBoundingClientRect().top - title.getBoundingClientRect().top;
             // space kept free under the photos, so the start of the text shows
             const room = g.classList.contains('has-captions') ? 150 : 125;
             g.style.setProperty('--img-h', Math.max(260, window.innerHeight - top - room) + 'px');
@@ -754,7 +823,7 @@
 
     document.getElementById('menu-button').addEventListener('click', toggleMenu);
     document.getElementById('close-button').addEventListener('click', toggleMenu);
-    window.addEventListener('hashchange', renderContent);
+    window.addEventListener('hashchange', renderContent);   // typed or shared links
     window.addEventListener('resize', fitGallery);
 
     buildSite();
