@@ -160,8 +160,9 @@
             .is-home #close-button { display: none; }   /* on the home page the menu stays open */
             #content-area { padding: 1.5rem 1rem 3rem 1rem; }
             .page-title { font-size: 1.5rem; line-height: 2rem; }
-            .gallery-img { height: 55vh; max-height: 55vh; }
-            .gallery .embed { width: calc(100vw - 2rem); height: auto; min-height: 0; }
+            /* phone: landscape photos max 90% of the screen width, portrait max 55% of the height */
+            .gallery-img { width: auto; height: auto; min-height: 0; max-width: 90vw; max-height: 55vh; }
+            .gallery .embed { width: 90vw; height: auto; min-height: 0; }
             .cv-row { grid-template-columns: 1fr; gap: 0; }
         }
 
@@ -218,7 +219,7 @@
                 <div class="cv-row"><span class="when">March 2022</span><span>Performing arts festival “Made in Estonia” – “Don’t Scratch”, together with Tormi Torop</span></div>
 
                 <h3>publications</h3>
-                <div class="cv-row"><span class="when">2025</span><span>starter-KIT, issue 2 – “LOVE IS DIASEL”</span></div>
+                <div class="cv-row"><span class="when">2025</span><span>starter-KIT, issue 2 – “LOVE IS DIESEL”</span></div>
                 <div class="cv-row"><span class="when">2025</span><span>Uncertain States Scandinavia, issue 23 – Stockholm Supermarket issue</span></div>
                 <div class="cv-row"><span class="when">2023</span><span>“Thanks for Everything” – artist book, edition of 49</span></div>
                 <div class="cv-row"><span class="when">2023</span><span>Uncertain States Scandinavia, issue 19 – “2023”</span></div>
