@@ -153,6 +153,29 @@
             font-size: 1rem; letter-spacing: 0.1em; font-weight: 50; white-space: nowrap;
         }
 
+        /* ---------- big photo view (lightbox) ---------- */
+        img.gallery-img { cursor: zoom-in; }
+        #lightbox {
+            position: fixed; inset: 0; z-index: 50;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.94);
+            cursor: zoom-out;
+            animation: lb-in 0.2s ease;
+        }
+        #lightbox[hidden] { display: none; }
+        #lightbox img { max-width: 92vw; max-height: 84vh; object-fit: contain; cursor: default; }
+        #lightbox .lb-caption {
+            margin-top: 0.75rem; max-width: 92vw; min-height: 1rem; text-align: center;
+            font-size: 0.75rem; line-height: 1rem; font-weight: 300; color: #d1d5db;
+        }
+        #lightbox button { position: absolute; color: #fff; opacity: 0.7; padding: 1rem; font-size: 1.75rem; line-height: 1; font-weight: 300; }
+        #lightbox button:hover { opacity: 1; }
+        #lightbox .lb-close { top: 0.5rem; right: 0.5rem; }
+        #lightbox .lb-prev { left: 0.25rem; top: 50%; transform: translateY(-50%); }
+        #lightbox .lb-next { right: 0.25rem; top: 50%; transform: translateY(-50%); }
+        @keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
+
         /* ---------- mobile ---------- */
         @media (max-width: 768px) {
             body { padding-top: 3rem; flex-direction: column; }
@@ -174,6 +197,9 @@
             .gallery-img { width: auto; height: auto; min-height: 0; max-width: 110vw; max-height: 55vh; }
             .gallery .embed { width: calc(100vw - 2rem); height: auto; min-height: 0; }
             .cv-row { grid-template-columns: 1fr; gap: 0; }
+            #lightbox { padding: 0.5rem; }
+            #lightbox img { max-width: 100vw; max-height: 80vh; }
+            #lightbox .lb-prev, #lightbox .lb-next { display: none; }   /* on the phone you swipe instead */
         }
 
         /* ---------- minimal scrollbars ---------- */
@@ -238,6 +264,14 @@
         </section>
         <!-- exhibition and project pages are built automatically from the lists below -->
     </main>
+
+    <div id="lightbox" hidden role="dialog" aria-modal="true" aria-label="photo">
+        <img alt="">
+        <p class="lb-caption"></p>
+        <button type="button" class="lb-prev" aria-label="previous photo">&#8249;</button>
+        <button type="button" class="lb-next" aria-label="next photo">&#8250;</button>
+        <button type="button" class="lb-close" aria-label="close">&times;</button>
+    </div>
 
     <script>
     /* =====================================================================
@@ -807,6 +841,60 @@
             g.style.setProperty('--img-h', Math.max(260, window.innerHeight - top - room) + 'px');
         });
     }
+
+    // ---------- big photo view: tap a photo to open it, tap beside it (or ×, Esc) to go back ----------
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    const lbCap = lb.querySelector('.lb-caption');
+    let lbList = [], lbIndex = 0, lbStart = 0;
+
+    function lbShow(i) {
+        lbIndex = (i + lbList.length) % lbList.length;
+        const img = lbList[lbIndex];
+        lbImg.src = img.currentSrc || img.src;
+        lbImg.alt = img.alt;
+        lbCap.textContent = img.closest('figure').querySelector('figcaption')?.textContent || '';
+        lb.querySelectorAll('.lb-prev, .lb-next').forEach(b => b.hidden = lbList.length < 2);
+    }
+    function lbOpen(img) {
+        lbList = [...img.closest('.gallery').querySelectorAll('img.gallery-img')];
+        lbStart = lbList.indexOf(img);
+        lbShow(lbStart);
+        lb.hidden = false;
+        document.documentElement.style.overflow = 'hidden';   // page underneath stays where it was
+    }
+    function lbClose() {
+        lb.hidden = true;
+        document.documentElement.style.overflow = '';
+        // if you moved to other photos, the gallery follows so that photo is in view
+        if (lbIndex !== lbStart) {
+            const fig = lbList[lbIndex].closest('figure'), g = fig.parentElement;
+            g.scrollTo({ left: fig.offsetLeft - g.offsetLeft, behavior: 'auto' });
+        }
+    }
+    document.addEventListener('click', e => {
+        const img = e.target.closest('.gallery img.gallery-img');
+        if (img) lbOpen(img);
+    });
+    lb.addEventListener('click', e => {
+        if (e.target.closest('.lb-prev')) return lbShow(lbIndex - 1);
+        if (e.target.closest('.lb-next')) return lbShow(lbIndex + 1);
+        if (e.target !== lbImg) lbClose();
+    });
+    document.addEventListener('keydown', e => {
+        if (lb.hidden) return;
+        if (e.key === 'Escape') lbClose();
+        if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+        if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
+    });
+    let touchX = null;
+    lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', e => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        touchX = null;
+        if (Math.abs(dx) > 50) lbShow(lbIndex + (dx < 0 ? 1 : -1));
+    });
 
     function updateTimer() {
         const el = document.getElementById('time-display');
