@@ -148,6 +148,9 @@
         .email { padding-top: 1rem; font-size: 0.875rem; line-height: 1.25rem; color: #000; }
         .email a:hover { text-decoration: underline; }
 
+        /* the time page gets empty space: 1/3 of the screen before and after it */
+        #time-content { padding-top: 33vh; padding-bottom: 33vh; }
+
         #time-display {
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             font-size: 1rem; letter-spacing: 0.1em; font-weight: 50; white-space: nowrap;
@@ -794,8 +797,11 @@
     const topGap = () => (window.innerWidth <= 768 ? 72 : 48);
 
     function scrollToPage(id, smooth) {
-        const title = document.querySelector(`#${id}-content .page-title`);
-        const y = title && id !== 'home' ? title.getBoundingClientRect().top + window.scrollY - topGap() : 0;
+        const section = document.getElementById(`${id}-content`);
+        const roomy = id === 'time';   // pages with empty space around them: land at the top of that space
+        const target = roomy ? section : section?.querySelector('.page-title');
+        const gap = roomy ? (window.innerWidth <= 768 ? 48 : 0) : topGap();
+        const y = target && id !== 'home' ? target.getBoundingClientRect().top + window.scrollY - gap : 0;
         window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto' });
         markActive(id);
     }

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>taavi rekkaro</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Taavi Rekkaro (EE, b. 1988) is a mixed media artist working in an intuitive dialogue between painting and photography.">
+    <meta name="keywords" content="taavi rekkaro, conceptual artist, installation art, fine art, tallinn, time project">
+    <link rel="canonical" href="https://taavirekkaro.com/">
+
+    <style>
+        /* ---------- base ---------- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
+        html { line-height: 1.5; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+        img { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; cursor: pointer; }
+        button { font: inherit; color: inherit; background: none; cursor: pointer; }
+        ul { list-style: none; }
+        a:focus-visible, button:focus-visible { outline: 1px solid #000; outline-offset: 2px; }
+
+        /* ---------- sidebar ---------- */
+        #menu-button {
+            display: none;
+            position: fixed; top: 0; left: 0; z-index: 20;
+            padding: 1rem;
+            font-weight: 700; color: #111827; text-transform: lowercase;
+        }
+        #sidebar {
+            width: 16rem;
+            flex-shrink: 0;
+            min-height: 100vh;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #fff;
+            padding: 2rem;
+            border-right: 1px solid #f3f4f6;
+            align-self: flex-start;   /* menu stays on screen while the page scrolls */
+            height: 100vh;
+            overflow-y: auto;
+        }
+        #sidebar h1 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 700; margin-bottom: 2rem; text-transform: lowercase; }
+        .nav-group + .nav-group { margin-top: 1rem; }
+        .nav-link, .nav-item {
+            display: block;
+            padding: 0.25rem 0;
+            color: #6b7280;
+            text-transform: lowercase;
+            transition: all 0.15s;
+        }
+        .nav-list { margin-top: 0.5rem; padding-left: 1rem; }
+        .nav-list li + li { margin-top: 0.25rem; }
+        .nav-item:hover { color: #000; }
+        .nav-link.active, .nav-item.active { color: #000; }
+        #close-button {
+            display: none;
+            position: absolute; top: 1rem; right: 1rem;
+            font-size: 1.25rem; line-height: 1.75rem; font-weight: 700;
+        }
+
+        /* ---------- content ---------- */
+        #content-area { flex-grow: 1; min-width: 0; width: 100%; padding: 3rem 6rem; }
+        .content-section { display: none; }
+        /* one long page: every page shown, one after another */
+        .one-page .content-section { display: block; }
+        .one-page .content-section + .content-section { padding-top: 3rem; border-top: 1px solid #f3f4f6; }
+
+        .page-title { font-size: 1.875rem; line-height: 2.25rem; font-weight: 300; text-transform: lowercase; margin-bottom: 0.75rem; }
+        .page-title.spaced { margin-bottom: 4rem; }
+
+        .meta {
+            margin-bottom: 1rem; max-width: 36rem;
+            font-size: 0.875rem; line-height: 1.625; font-weight: 300;
+            color: #374151; text-transform: lowercase;
+        }
+        .meta > * + * { margin-top: 0.5rem; }
+        .details { padding-top: 0.5rem; font-size: 0.75rem; line-height: 1rem; color: #4b5563; border-top: 1px solid #f3f4f6; }
+        .details > * + * { margin-top: 0.25rem; }
+
+        .gallery {
+            display: flex; flex-wrap: nowrap; gap: 1rem;
+            overflow-x: auto; scroll-snap-type: x mandatory;
+            padding: 0.25rem 0 0.5rem; width: 100%;
+        }
+        .gallery { align-items: center; }   /* photos of different shapes sit centred in height */
+        .gallery figure { display: flex; flex-direction: column; flex-shrink: 0; scroll-snap-align: start; }
+        .gallery-img {
+            height: var(--img-h, calc(100vh - 16.5rem));   /* --img-h is set by fitGallery() */
+            max-height: var(--img-h, calc(100vh - 16.5rem));
+            min-height: 260px;
+            width: auto;
+            object-fit: contain;
+        }
+        .gallery figcaption {
+            width: 0; min-width: 100%;   /* caption wraps to the photo's width */
+            margin-top: 0.5rem;
+            height: 2rem; overflow: hidden;   /* room for two lines, so the page doesn't jump while photos load */
+            font-size: 0.75rem; line-height: 1rem; font-weight: 300; color: #6b7280;
+        }
+
+        .text-block {
+            margin-top: 3rem; padding-top: 1.5rem; padding-bottom: 4rem; max-width: 36rem;
+            font-size: 0.875rem; line-height: 1.625; font-weight: 300; color: #374151;
+            border-top: 1px solid #f3f4f6;
+        }
+        .text-block > * + * { margin-top: 1rem; }
+        .text-block .label { font-weight: 400; color: #000; text-transform: lowercase; }
+        .credits { font-size: 0.75rem; line-height: 1rem; color: #6b7280; text-transform: lowercase; }
+        .credits > * + * { margin-top: 0.125rem; }
+        .quote { margin: 1rem 0; padding: 0.5rem 0 0.5rem 1rem; border-left: 1px solid #e5e7eb; color: #000; }
+        .quote > * + * { margin-top: 0.5rem; }
+        .quote p { font-style: italic; }
+        .pull { padding-left: 1rem; font-style: italic; color: #000; font-weight: 400; }
+
+        /* small helpers used inside the texts */
+        .black { color: #000; }
+        .normal { font-weight: 400; }
+        .lc { text-transform: lowercase; }
+        .xs { font-size: 0.75rem; line-height: 1rem; }
+        .gray { color: #6b7280; }
+        .mt-1 { margin-top: 0.25rem; }
+        .pt-1 { padding-top: 0.25rem; }
+
+        .index { font-size: 0.875rem; line-height: 1.25rem; color: #374151; text-transform: lowercase; }
+        .index > * + * { margin-top: 0.5rem; }
+        .index a:hover { text-decoration: underline; }
+
+        .gallery .embed { height: var(--img-h, calc(100vh - 16.5rem)); min-height: 260px; width: auto; aspect-ratio: 16 / 9; border: 0; background: #f3f4f6; }
+
+        .cv { margin-top: 3rem; max-width: 42rem; font-size: 0.875rem; line-height: 1.625; font-weight: 300; color: #374151; }
+        .cv h3 { margin: 2.5rem 0 0.75rem; font-size: 0.875rem; font-weight: 400; color: #000; text-transform: lowercase; }
+        .cv h3:first-child { margin-top: 0; }
+        .cv-row { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: 0.375rem 0; border-top: 1px solid #f3f4f6; }
+        .cv-row .when { color: #6b7280; }
+        .cv a { color: #000; text-decoration: underline; text-decoration-color: #d1d5db; text-underline-offset: 2px; }
+        .cv a:hover { text-decoration-color: #000; }
+        .about-body { max-width: 42rem; color: #374151; }
+        .about-body > * + * { margin-top: 1rem; }
+        .email { padding-top: 1rem; font-size: 0.875rem; line-height: 1.25rem; color: #000; }
+        .email a:hover { text-decoration: underline; }
+
+        #time-display {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 1rem; letter-spacing: 0.1em; font-weight: 50; white-space: nowrap;
+        }
+
+        /* ---------- big photo view (lightbox) ---------- */
+        img.gallery-img { cursor: zoom-in; }
+        #lightbox {
+            position: fixed; inset: 0; z-index: 50;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.94);
+            cursor: zoom-out;
+            animation: lb-in 0.2s ease;
+        }
+        #lightbox[hidden] { display: none; }
+        #lightbox img { max-width: 92vw; max-height: 84vh; object-fit: contain; cursor: default; }
+        #lightbox .lb-caption {
+            margin-top: 0.75rem; max-width: 92vw; min-height: 1rem; text-align: center;
+            font-size: 0.75rem; line-height: 1rem; font-weight: 300; color: #d1d5db;
+        }
+        #lightbox button { position: absolute; color: #fff; opacity: 0.7; padding: 1rem; font-size: 1.75rem; line-height: 1; font-weight: 300; }
+        #lightbox button:hover { opacity: 1; }
+        #lightbox .lb-close { top: 0.5rem; right: 0.5rem; }
+        #lightbox .lb-prev { left: 0.25rem; top: 50%; transform: translateY(-50%); }
+        #lightbox .lb-next { right: 0.25rem; top: 50%; transform: translateY(-50%); }
+        @keyframes lb-in { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ---------- mobile ---------- */
+        @media (max-width: 768px) {
+            body { padding-top: 3rem; flex-direction: column; }
+            #menu-button, #close-button { display: block; }
+            #menu-button { width: 100%; text-align: left; background: #fff; }
+            #sidebar {
+                position: fixed; top: 0; left: -100%;
+                width: 100%; height: 100%; overflow-y: auto;
+                transition: left 0.3s ease-in-out;
+                z-index: 30;   /* open menu covers the "menu" bar */
+            }
+            #sidebar.open { left: 0; }
+            .is-home #close-button { display: none; }   /* on the home page the menu stays open */
+            #content-area { padding: 1.5rem 1rem 3rem 1rem; }
+            .page-title { font-size: 1.5rem; line-height: 2rem; }
+            /* phone: landscape photos max 110% of the screen width, portrait max 55% of the height.
+               The gallery keeps one fixed height, so every photo sits centred in it. */
+            .gallery { height: calc(55vh + 3.25rem); }
+            .gallery-img { width: auto; height: auto; min-height: 0; max-width: 110vw; max-height: 55vh; }
+            .gallery .embed { width: calc(100vw - 2rem); height: auto; min-height: 0; }
+            .cv-row { grid-template-columns: 1fr; gap: 0; }
+            #lightbox { padding: 0.5rem; }
+            #lightbox img { max-width: 100vw; max-height: 80vh; }
+            #lightbox .lb-prev, #lightbox .lb-next { display: none; }   /* on the phone you swipe instead */
+        }
+
+        /* ---------- minimal scrollbars ---------- */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #ffffff; }
+        ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+        * { scrollbar-width: thin; scrollbar-color: #e5e7eb #ffffff; }
+    </style>
+</head>
+<body>
+
+    <button id="menu-button" type="button">menu</button>
+
+    <aside id="sidebar">
+        <h1>taavi rekkaro</h1>
+        <nav id="nav"></nav>
+        <button id="close-button" type="button" aria-label="close menu">&times;</button>
+    </aside>
+
+    <main id="content-area">
+        <section id="home-content" class="content-section"></section>
+
+        <section id="about-content" class="content-section">
+            <h2 class="page-title spaced">about</h2>
+            <div class="about-body">
+                <p>Taavi Rekkaro (EE, b. 1988) is a mixed media artist whose work reflects an intuitive dialogue between visual art and photography. Combining images with physical materials, he seeks to capture the energy of fleeting moments, blurring the lines between memory and self-discovery. Rekkaro has shown his work internationally at exhibitions and art fairs, and it has been featured in international publications.</p>
+                <p class="email"><a href="mailto:something@taavirekkaro.com">something@taavirekkaro.com</a></p>
+            </div>
+
+            <div class="cv">
+                <h3>education</h3>
+                <div class="cv-row"><span class="when">2019–</span><span>University of Tartu – MA, Conversion Master</span></div>
+                <div class="cv-row"><span class="when">2007–2012</span><span>Estonian Academy of Arts – BA, Contemporary Art, Printmaking</span></div>
+
+                <h3>upcoming exhibitions</h3>
+                <div class="cv-row"><span class="when">November 2026</span><span>Group show at Skog Art Gallery, Oslo, Norway</span></div>
+                <div class="cv-row"><span class="when">October 2027</span><span>Group show with ADEY, The Hays, Tor Simen Ulstein and Maria Di Stefano at Romsdal Kunstsenter, Molde, Norway</span></div>
+
+                <h3>past exhibitions</h3>
+                <div class="cv-row"><span class="when">September 2026</span><span><a href="#fototallinn-2026">Foto Tallinn art fair</a>, Kai Art Center, with Vasli Souza Gallery</span></div>
+                <div class="cv-row"><span class="when">August 2026</span><span>Solo show – <a href="#do-i-need-to-say-it-out-myself-2026">“do i need to say it out myself?”</a>, FOKU Gallery, Tallinn, Estonia</span></div>
+                <div class="cv-row"><span class="when">July 2026</span><span>Solo show – <a href="#i-would-never-remember-2026">“i would never remember saying something so stupid”</a>, Vasli Souza, Båstad, Sweden</span></div>
+                <div class="cv-row"><span class="when">October 2025</span><span><a href="#oslo-negativ-2025">Oslo Negativ Festival</a> – solo room with Vasli Souza Gallery</span></div>
+                <div class="cv-row"><span class="when">April 2025</span><span>Supermarket Art Fair, Stockholm – <a href="#all-a-day">video installation</a> presented with Uncertain States Scandinavia</span></div>
+                <div class="cv-row"><span class="when">March 2024</span><span>Solo show – <a href="#thanks">“thanks for everything”</a>, Vasli Souza Gallery, Oslo, Norway</span></div>
+                <div class="cv-row"><span class="when">March 2024</span><span>Group show – “Enese õrnad žestid”, EKA Gallery, Tallinn, Estonia</span></div>
+                <div class="cv-row"><span class="when">October 2023</span><span>Solo show – <a href="#thanks">“thanks for everything”</a>, Monumental Gallery, Tartu Art House, Estonia</span></div>
+                <div class="cv-row"><span class="when">May 2023</span><span>Group show – “In the Defense of Love” by Uncertain States Scandinavia, Fotografihuset, Oslo</span></div>
+                <div class="cv-row"><span class="when">March 2023</span><span>Performing arts festival “Made in Estonia Marathon” – “Bänger”, together with Nele Tiidelepp, Riin Maide, Jarmo Reha and others</span></div>
+                <div class="cv-row"><span class="when">December 2022</span><span>Solo show – <a href="#thanks">“thanks for everything”</a>, Draakoni Gallery, Tallinn, Estonia</span></div>
+                <div class="cv-row"><span class="when">June 2022</span><span>Group show – “Kevadnäitus”, Tallinn Art Hall, Estonia</span></div>
+                <div class="cv-row"><span class="when">March 2022</span><span>Performing arts festival “Made in Estonia” – “Don’t Scratch”, together with Tormi Torop</span></div>
+
+                <h3>publications</h3>
+                <div class="cv-row"><span class="when">2025</span><span>starter-KIT, issue 2 – “LOVE IS DIESEL”</span></div>
+                <div class="cv-row"><span class="when">2025</span><span>Uncertain States Scandinavia, issue 23 – Stockholm Supermarket issue</span></div>
+                <div class="cv-row"><span class="when">2023</span><span>“Thanks for Everything” – artist book, edition of 49</span></div>
+                <div class="cv-row"><span class="when">2023</span><span>Uncertain States Scandinavia, issue 19 – “2023”</span></div>
+                <div class="cv-row"><span class="when">2022</span><span>Uncertain States Scandinavia, issue 16.5 – “2022”</span></div>
+            </div>
+        </section>
+        <!-- exhibition and project pages are built automatically from the lists below -->
+    </main>
+
+    <div id="lightbox" hidden role="dialog" aria-modal="true" aria-label="photo">
+        <img alt="">
+        <p class="lb-caption"></p>
+        <button type="button" class="lb-prev" aria-label="previous photo">&#8249;</button>
+        <button type="button" class="lb-next" aria-label="next photo">&#8250;</button>
+        <button type="button" class="lb-close" aria-label="close">&times;</button>
+    </div>
+
+    <script>
+    /* =====================================================================
+       YOUR CONTENT — this is the only part you need to edit.
+
+       To add a new show or project:
+         1. Make a folder next to index.html (e.g.  thanks/ ) and put the photos in it.
+         2. Copy one block below, change the id, menu name, folder and photos.
+         3. The menu, the overview page and the photo page appear by themselves.
+
+       Photos can be listed two ways:
+         images: ['first.jpg', 'second.jpg']      -> shown in this order
+         count: 8                                 -> uses 1.jpg, 2.jpg ... 8.jpg
+         (add  ext: 'jpeg'  if your files end in .jpeg)
+
+       Captions (small text under a photo):
+         caption: 'text'                          -> same caption under every photo
+         captions: { 'Tallinn': 'text', ... }     -> caption by sub-folder, e.g. 'Tallinn/photo.jpg'
+         { file: 'photo.jpg', caption: 'text' }   -> caption for one photo only
+
+       Extra options:
+         draft: true   -> page works by its link, but is hidden from the menu
+         videos (.mp4) can go in the photo list like any photo; they play muted when on screen
+         YouTube videos:  { youtube: 'ZqjNwTbqiH8', caption: 'text' }   (the code after youtu.be/)
+         text: `...`   -> text under the photos (leave out if not needed)
+       Order in each list = order in the menu (newest first).
+       ===================================================================== */
+
+    // true  = all pages on one long page, the menu jumps to the right place
+    // false = one page at a time (the way it was before)
+    const ONE_PAGE = true;
+
+    const EXHIBITIONS = [
+        {
+            id: 'do-i-need-to-say-it-out-myself-2026',
+            menu: 'do i need to say it out myself? 2026',
+            title: '“do i need to say it out myself?” 2026',
+            folder: '',   // these photos sit next to index.html
+            images: [
+                { file: '01_foku_overview_taavi-rekkaro-skog-137.jpg', alt: 'foku overview' },
+                { file: '02_Nyc_beers_2025_2026-skog-138.jpg', alt: 'nyc beers' },
+                { file: '03_vosu dream_1_5_2024-skog-139.jpg', alt: 'vosu dream' },
+                { file: '04_sweaty paris toilet_2026-skog-140.jpg', alt: 'sweaty paris toilet' },
+                { file: '05_needle vail_2025_2026-skog-141.jpg', alt: 'needle vail' },
+                { file: '06_nida still angry_2025_2026-skog-142.jpg', alt: 'nida still angry' },
+                { file: '07_a classic american pool_2025-skog-143.jpg', alt: 'a classic american pool' },
+                { file: '08_bastad decor_2026-skog-144.jpg', alt: 'bastad decor' },
+                { file: '09_kutaisi wave_variation 1_2024_2026-skog-145.jpg', alt: 'kutaisi wave' },
+                { file: '10_touching table-skog-146.jpg', alt: 'touching table' }
+            ],
+            meta: `
+                <div>
+                    <p class="black">“do i need to say it out myself?”</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>duo show with hilla kurki “something that should be felt”</p>
+                    <p class="black">foku gallery</p>
+                    <p>06.08 - 26.09.2026</p>
+                </div>`,
+            text: `
+                <div class="credits">
+                    <p class="black normal">“do i need to say it out myself?”</p>
+                    <p>taavi rekkaro</p>
+                    <p>foku gallery</p>
+                    <p>august-september 2026</p>
+                </div>
+                <p>A moment before i didn’t know what i was feeling, although my gut, my body already knew. Instead i had to listen to myself, which brought out those words with a strange sparkle. How to better understand my problems, those that need to live with me. Mistakes that gain strength or are hidden according to the phase of the moon, the sun, hunger, or when was the last time i had sex?</p>
+                <p>The photos and “objects” on display treat photography as something that should be felt, that has its own memory and where closeness becomes part of the experience. Together, the artworks create a dialogue between distance and intimacy. Moments in everyday life, asking how do we stay connected to what is important. How can we be sure you even were there - were those moments real? What have you lost to confusion or simply forgotten? Fleeting moments captured as photos, quotes, text, paintings, sculptures or who knows in what shape.</p>
+                <p>This series is an attempt to replace a crushing core belief and to find a way to find the part that’s actually important. On the gallery wall is a melting moment, consisting of works starting from 2023. Captured moments with good friends, from places full of emotions or just to feel alive or just a little bit good. To be present and to listen what the body/mind is looking to catch.</p>
+                <p>The exhibition wall where time could dissolve, but next to it where you can spend time. The wall doesn’t hold a single story, but you should have time to find your own narrative.</p>
+                <div class="quote">
+                    <p>“Margus* waits and looks at me. I wait and look at him.</p>
+                    <p>I ask: “Do i have to say it out myself?</p>
+                    <p>Margus looks,<br>Margus widens his eyes and nods slightly.</p>
+                    <p>I answer: “Because I am a bad person.””</p>
+                </div>
+                <p class="xs gray">conversation March 2021<br>*psychologist Margus</p>`
+        },
+        {
+            id: 'i-would-never-remember-2026',
+            menu: 'i would never remember 2026',
+            title: 'i would never remember saying something so stupid, 2026',
+            folder: 'i would never',
+            images: [
+                '2026_VS_Taavi_WebRes_1-147.jpg',
+                '2026_VS_Taavi_HighRes_text_1-135.jpg',
+                '2026_VS_Taavi_WebRes_2-149.jpg',
+                '2026_VS_Taavi_WebRes_3-150.jpg',
+                '2026_VS_Taavi_HighRes_text_2-136.jpg',
+                '2026_VS_Taavi_WebRes_5-151.jpg',
+                '2026_VS_Taavi_WebRes_6-152.jpg',
+                '2026_VS_Taavi_WebRes_7-153.jpg',
+                '2026_VS_Taavi_WebRes_8-154.jpg',
+                '2026_VS_Taavi_WebRes_9-155.jpg',
+                '2026_VS_Taavi_WebRes_10-148.jpg'
+            ],
+            meta: `
+                <div>
+                    <p class="black">i would never remember<br>saying something so stupid*</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                    <p class="xs gray mt-1">*said by tor, london morning<br>16.05.2026</p>
+                </div>
+                <div class="details">
+                    <p>summer solo show, presented at</p>
+                    <p class="black">vasli souza båstad</p>
+                    <p>10.07 - 02.08.26</p>
+                    <p class="pt-1 gray">installation views by: kunstdok // tor s. ulstein</p>
+                </div>`,
+            text: `
+                <p class="lc">In May of 2026, rasmus, tor and taavi went to visit the photo london art fair. the title of this show is from one of those mornings: taavi read out a memory from the previous night, where his good friend tor tried to get to the root of their cause.</p>
+                <p class="pull lc">“we like to be like sad jazz<br>we want to be like sad jazz”</p>
+                <p class="lc">without writing down, this or these moments would just be lived but forgotten. (it’s also fun to see tor reacting to his past thoughts.</p>
+                <p class="lc">for taavi, catching moments is sacred. how can you be sure you even were there - did these moments truly exist? what have you lost if they get mangled up or simply forgotten?</p>
+                <p class="lc">in his process taavi is trying to catch fleeting moments like these - whether they come in the shape of photos, quotes, texts, paintings, sculptures or pieces of tape. presented in vasli souza, båstad, is a similar dissolving snapshot of taavi’s ongoing project, consisting of photos and sculptures starting from 2023. captured moments of good friends, places full of emotions and just trying to feel alive or just a bit happy.</p>`
+        },
+        {
+            id: 'thanks',
+            menu: 'thanks for everything 2022-2024',
+            title: 'thanks for everything, 2022-2024',
+            folder: 'thanks',
+            captions: {
+                'Tallinn': 'Tallinn 2022 - installation photos by Hedi Jaansoo',
+                'Tartu': 'Tartu 2023 - installation photos by Joosep Kivimäe',
+                'Oslo': 'Oslo 2024 - installation photos by Kunstdok // Tor Simen Ulstein'
+            },
+            images: [
+                'Tallinn/aitah_Hedi-Jaansoo_2-100.jpg',
+                { file: 'Taavi-Rekkaro_draakoni_plakat-164.jpg', caption: 'Poster by Kert Viiart' },
+                'Tallinn/aitah_Hedi-Jaansoo_6-101.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_16-102.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_19-103.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_20-104.jpg',
+                'Tallinn/aitah_Hedi-Jaansoo_27-105.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-3-109.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-5-106.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-6-110.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-7-111.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-14-107.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-19-112.jpg',
+                'Tartu/2023-11-05_Aitäh_kõige_eest,_Taavi_Rekkaro-29-108.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_02-156.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_03-157.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_04-158.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_05-159.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_06-160.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_10-161.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_12-162.jpg',
+                'Oslo/2024_03_VS_T_Rekkaro_WebRes_13-163.jpg'
+            ],
+            meta: `
+                <div>
+                    <p class="black">thanks for everything / aitäh kõige eest</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>draakoni gallery, tallinn, estonia, 14.12-07.01.2023</p>
+                    <p>monumental gallery, tartu, estonia, 14.10-12.11.2023</p>
+                    <p>vasli souza, oslo, norway, 1.03-24.03.2024</p>
+                    <p class="pt-1 gray">exhibition text - joonas veelmaa<br>graphic design - kert viiart</p>
+                </div>`,
+            text: `
+                <p>When a long-term relationship suddenly ends, the artist discovers himself in a complete emptiness. His partner takes all her things and when she leaves then all the meanings leave with her.</p>
+                <p>Only the good-bye message “thanks for everything” left on the mirror reminds the artist of the fact that a certain world has existed somewhere at some time before. From the mirror, I am facing life that seems to have failed for good. I have studied a specialty that is now just a diploma for me and not my calling. My long-time loved one has found herself a better partner. My room is empty.</p>
+                <p>What would be your last straw if you'd lose everything?</p>
+                <p>A journey of a drowning man begins where art serves as the last tower of strength instead of self-expression. A lifebuoy to which to cling. Documenting self-pity, implacability, fussiness and growth is a path that one can follow only alone.</p>
+                <p>What does the drowning man see?<br>
+                   Winter reflecting from the books of the former loved one.<br>
+                   The undone bed that still remembers the warmth of the partner who has left.<br>
+                   Frames turned upside down, taken off the wall but that have not left the room.<br>
+                   Incoherent pain that wants to become words.</p>
+                <p>But also the study material for growing plants and survival drive.</p>
+                <p>This is letting go and recording of letting go.</p>
+                <p>Being reborn while wishing to bring the old life with me. Moving along the circle and hoping that it is a spiral. Perhaps it is?</p>
+                <div class="quote">
+                    <p>thank you for leaving me in darkness<br>thank you for teaching me how to breathe</p>
+                    <p>thank you for getting and giving and getting everything<br>with you</p>
+                    <p>I am angry happy<br>I will never make peace and<br>I have already forgiven</p>
+                    <p>thank you for everything</p>
+                </div>
+                <p class="xs gray">exhibition text: Joonas Veelmaa</p>`
+        }
+    ];
+
+    const SHOWS = [
+        {
+            id: 'fototallinn-2026',
+            menu: 'fotoTallinn 2026',
+            title: 'fotoTallinn, 2026',
+            folder: 'fototallinn',
+            images: [
+                { file: '1-168.jpg', caption: 'Overview of the booth at Foto Tallinn' },
+                { file: '2-167.jpg', caption: '“Muhu Traveller” 1/2 & 2/2, diptych, 41 x 30 cm each, 1/5 + 1AP' },
+                { file: '3-166.jpg', caption: '' },   // <- caption for photo 3 still missing
+                { file: '4-165.jpg', caption: '“Kura – Stormy Peninsula”, diptych, 82 x 57 cm, 2/5 + 1AP' },
+                { file: '5-171.jpg', caption: '“NYC Scream”, painting, 6 x 6 cm / 20 x 30 cm' },
+                { file: '6-170.jpg', caption: 'Close-up of “Muhu Traveller” 1/2' },
+                { file: '7-169.jpg', caption: '“Needles”' },
+                { file: '8-172.jpg', caption: '“Kopli Legs 1/2”, diptych, 45 x 30 cm' }
+            ],
+            meta: `
+                <div>
+                    <p class="black">foto tallinn 2026</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>presented artworks from the series “do i need to say it out myself?”</p>
+                    <p>presented at the fair by <span class="black">vasli souza gallery (no)</span></p>
+                    <p class="pt-1 gray">installation photos by: kunstdok // tor s. ulstein</p>
+                </div>`,
+            text: `
+                <p>At Foto Tallinn, Rekkaro presented a series of “photo sculptures” that challenge conventional interactions between artwork and viewer – reframing photography as something to be touched, and allowing closeness to become part of the experience. Together, the works create a dialogue on distance and intimacy, moments in the everyday, and the ways in which we stay connected.</p>`
+        },
+        {
+            id: 'oslo-negativ-2025',
+            menu: 'oslo negativ 2025',
+            title: 'silent scream, oslo negativ 2025',
+            folder: 'oslo_negativ',
+            images: [
+                { file: 'downstairs amps_aka bitey and beauty, 2025-128.jpg', caption: '“amps aka bitey and beauty”, 2025, print on silk 150 x 215 cm and a mirror' },
+                { file: 'elevator1-133.jpg', caption: '“Silent Scream”, 2025, fabric elevator installation' },
+                { file: 'downstairs installation shot_amps-132.jpg', caption: 'Installation view, “amps aka bitey and beauty”' },
+                { file: 'elevator3-131.jpg', caption: '“Silent Scream”, 2025, inside the elevator with the video controller' },
+                { file: 'double sided - oslo 2-129.jpg', caption: '“boys” & “and killer legs”, double-sided painting, 71 x 60 cm' },
+                { file: 'double sided - oslo 3-130.jpg', caption: '“boys” & “and killer legs”, the other side' },
+                { file: 'elevator video.mp4', caption: '“Silent Scream”, 2025, video from the elevator' }
+            ],
+            meta: `
+                <div>
+                    <p class="black">silent scream</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>oslo negativ festival 2025</p>
+                    <p class="black">nasjonalgalleriet, oslo</p>
+                    <p>where Munch’s Scream was shown before – and at some point also stolen from</p>
+                    <p class="pt-1 gray">installation photos by: Daniela Fribel & Taavi Rekkaro</p>
+                </div>`,
+            text: `
+                <p>Please understand,<br>please realise,<br>please, let me be.</p>
+                <p>Why keep fighting yourself - pushing and pushing, trying to get shit done, but all the time fighting with myself. Thinking about it all the time, even when it’s going, going well.</p>
+                <p>If you fall in love you fall in love, you’re just flowing down the river.<br>If a project text is formed in your gut, you only have to sit and let it flow out - just as a passenger, trying to add something of your own.</p>
+                <p>Taavi<br>Taaaaavi, please hear!<br>It’s a silent scream for help.</p>
+                <p>Listen from within - hear what I’d want to say next.<br>What would I say if I weren’t so afraid.<br>You know what I feel, even before I say it anyway.<br>You know - but maybe you don’t get what I couldn’t say.</p>
+                <p>So I try to channel you, to reach you.<br>For those 30 seconds or so in the elevator, we are alone,<br>I look at us, and try to let you hear yourself.</p>
+                <p>I don’t want to be you alone.<br>I don’t want to command you around.</p>
+                <p>Let’s just be.<br>Let me be.<br>I let you be.<br>Let us be.</p>
+
+                <p class="label">works:</p>
+                <div class="credits">
+                    <p class="black normal">silent scream</p>
+                    <p>2025</p>
+                    <p>installation with 90 videos + a video projected on the fabric. fabric “elevator” with a controller to choose between the videos</p>
+                </div>
+                <div class="credits">
+                    <p class="black normal">amps aka bitey and beauty</p>
+                    <p>2025</p>
+                    <p>print on silk 150 x 215 cm and a mirror</p>
+                    <p>photo from the series “praegu on nii”</p>
+                </div>
+                <div class="credits">
+                    <p class="black normal">“boys” & “and killer legs”</p>
+                    <p>double-sided painting</p>
+                    <p>painting on inkjet prints, in see-through frames with glass also on the back. bespoke birch frames from artproof.</p>
+                    <p>both — variation #1, arles, 2024 / painting, 2025</p>
+                    <p>71 x 60 cm</p>
+                    <p>the paintings were featured in the latest edition of uncertain states scandinavia</p>
+                </div>`
+        },
+        {
+            id: 'all-a-day',
+            menu: "it's all a day 2025",
+            title: "“it's all a day”, 2025",
+            folder: 'all_a_day',
+            caption: "“it's all a day”, 2025, sample still",
+            images: [
+                { youtube: 'ZqjNwTbqiH8', caption: "“it's all a day”, 2025, video" },
+                'sample stills - its all a day - 1-113.jpg',
+                'sample stills - its all a day - 2-114.jpg',
+                'sample stills - its all a day - 3-115.jpg',
+                'sample stills - its all a day - 4-116.jpg',
+                'sample stills - its all a day - 5-117.jpg',
+                'sample stills - its all a day - 6-118.jpg',
+                'sample stills - its all a day - 7-119.jpg',
+                'sample stills - its all a day - 8-120.jpg',
+                'sample stills - its all a day - 9-121.jpg',
+                'sample stills - its all a day - 10-122.jpg',
+                'sample stills - its all a day - 11-123.jpg',
+                'sample stills - its all a day - 12-124.jpg',
+                'sample stills - its all a day - 13-125.jpg',
+                'sample stills - its all a day - 14-126.jpg',
+                'sample stills - its all a day - 15-127.jpg'
+            ],
+            meta: `
+                <div>
+                    <p class="black">“it's all a day”</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>66 photographs combined with 99 unique paintings, original size 21 x 25 cm</p>
+                    <p>video presented at <span class="black">supermarket art fair 2025, stockholm</span></p>
+                    <p>featured in uncertain states scandinavia, issue 23</p>
+                </div>`,
+            text: `
+                <p>A moment grabs your attention, points, and asks you to capture its passing – to photograph it. These moments might feel fleeting or empty, but you just have to trust the process. The unconscious conspires with the subconscious world. We see, but we need help to truly see, to try to understand.</p>
+                <p>Combining photography with single-session action painting makes it possible to stretch out the moment, to return to it and combine it with new experiences. Creating other worlds, another possibility of life, a chance for new energy to flow from the fleeting memory of what once was.</p>
+                <p>“it's all a day” consists of 66 photographs combined with 99 unique paintings, each originally 21 x 25 cm. The series can also be presented as large-format reprints.</p>
+                <p>The video was presented at Supermarket Art Fair 2025 in Stockholm and featured in Uncertain States Scandinavia, issue 23.</p>`
+        }
+    ];
+
+    const PROJECTS = [
+        { id: 'time', menu: 'time', type: 'time' },
+        {
+            id: 'for-now',
+            menu: 'for now, this is how it is 2025–',
+            title: '“for now, this is how it is”, 2025–',
+            folder: 'for_now',
+            images: [
+                { file: '01_scream2_ sto_150x110cm_2025-180.jpg', caption: '“Scream 2, Sto”, 2025, 150 x 110 cm, unique' },
+                { file: '03_answer to nyc_london_100x150cm_2025-177.jpg', caption: '“Answer to NYC, London”, 2025, 100 x 150 cm, unique' },
+                { file: '03_naked in cph_150x110cm_2024-175.jpg', caption: '“Naked in CPH”, 2024, 150 x 110 cm, unique' },
+                { file: '05_The worst thing I_ve ever done__160x102cm_2024-178.jpg', caption: '“The Worst Thing I’ve Ever Done”, 2024, 160 x 102 cm, unique' },
+                { file: '06_scream and the city_150x110cm_2025-174.jpg', caption: '“Scream and the City”, 2025, 150 x 110 cm, unique' },
+                { file: '07_isn_t it clear_150x210cm_2025-176.jpg', caption: '“Isn’t It Clear”, 2025, 150 x 210 cm, unique' },
+                { file: '07_nyc_150x110cm_2025-179.jpg', caption: '“NYC”, 2025, 150 x 110 cm, unique' },
+                { file: '08_five men_150x400cm_2025-173.jpg', caption: '“Five Men”, 2025, 150 x 400 cm, unique' },
+                { file: '08_scream1 berlin_100x70cm_2025-181.jpg', caption: '“Scream 1, Berlin”, 2025, 100 x 70 cm, unique' },
+                { file: '09_from inside_100x140cm_2025-182.jpg', caption: '“From Inside”, 2025, 100 x 140 cm, unique' },
+                { file: '13_us_100x70cm_2025-183.jpg', caption: '“Us”, 2025, 100 x 70 cm, unique' },
+                { file: '15_100x70cm_2025-184.jpg', caption: '“Untitled”, 2025, 100 x 70 cm, unique' },
+                { file: '16_rabbit_100x140cm_2025-185.jpg', caption: '“Rabbit”, 2025, 100 x 140 cm, unique' },
+                { file: '17_i didn_t want to do it_2025-187.jpg', caption: '“I Didn’t Want to Do It”, 2025, unique' },
+                { file: '18_i didn_t want to do it 2_2025-186.jpg', caption: '“I Didn’t Want to Do It 2”, 2025, unique' }
+            ],
+            meta: `
+                <div>
+                    <p class="black">“for now, this is how it is”</p>
+                    <p class="mt-1">taavi rekkaro</p>
+                </div>
+                <div class="details">
+                    <p>photos printed on watercolor paper and painted with watercolors</p>
+                    <p>ongoing project, 2025–</p>
+                    <p class="gray">not yet exhibited</p>
+                </div>`,
+            text: `
+                <p>In “for now, this is how it is”, Taavi Rekkaro works with emotions through photography and performative painting, which become a kind of meditation, a search for a narrative in his confusion. He moves between different hidden pains and moments, guided by moods, photographs, the painting and movement. What flows out creates new worlds based on the essence of his current state, as purely and with as little interference as possible.</p>
+                <p>He approaches his art with a kind of peasant stubbornness – not solving the world’s problems or offering explanations. Leaving aside the art world and philosophy allows him to push and paint color onto his photos until something arrives. Combining photos with forceful painting, he leaves little room for himself or the viewer. The artworks start to act like a Baroque painting: they feel very busy, but if you look closely, you always find new scenarios to create and to let yourself follow.</p>
+                <p>Looking for answers through anger, he uses art as revenge for being alone, pushing even deeper into his own inner world. As revenge, he lets the subconscious point the camera, allowing the body and the moment to guide the flow. While painting, he stays present until a connection is made, only trying to grab color and water with the brush.</p>
+                <p>While photographing, he tries not to interrupt the emotion and to preserve as much of the original energy as possible – the moment when the artist and that elusive “something” are both present in pure form. In that moment, emotion and the energy of worlds meet. This is his way of channelling moments from the universe, of sensing something profoundly deep from which to search for himself.</p>
+                <p>Performative painting, shifting between abstraction and figurative forms inspired by photographic details, is for him like emotion itself. While painting, the emotions are wet, full of contrast and active, but as they dry, they recede into the background and get forgotten. What’s left is just the memory of something very strong that life later softens a little.</p>
+                <p>This is an ongoing project, with new combinations of photos and paintings constantly being worked on.</p>
+                <p class="label">practical part:</p>
+                <p>If possible, I would like to show the original photo-paintings. Another option is to rephotograph them and create a site-specific solution that fits the room.</p>`
+        }
+    ];
+
+    /* =====================================================================
+       Site code below — no need to touch.
+       ===================================================================== */
+
+    const BASE_TITLE = 'taavi rekkaro';
+    const START_TIME = Date.UTC(2024, 11, 8, 10, 56, 0);
+    const GROUPS = [
+        { key: 'exhibitions', label: 'exhibitions', items: EXHIBITIONS, textLabel: 'exhibition text:' },
+        { key: 'shows', label: 'shows', items: SHOWS, textLabel: 'text:' },
+        { key: 'projects', label: 'projects', items: PROJECTS, textLabel: 'text:' }
+    ];
+    const ROUTES = {};
+    let eagerLeft = 2;   // only the first photos of the site load right away, the rest when you get near them
+
+    const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+    function photosOf(item) {
+        let list = item.images || [];
+        if (!list.length && item.count) {
+            list = Array.from({ length: item.count }, (_, i) => `${i + 1}.${item.ext || 'jpg'}`);
+        }
+        return list.map((entry, i) => {
+            const e = typeof entry === 'string' ? { file: entry } : entry;
+            if (e.youtube) return { youtube: e.youtube, caption: e.caption || '', alt: `taavi rekkaro - ${item.menu} - video` };
+            const sub = e.file.includes('/') ? e.file.split('/')[0] : '';
+            const caption = e.caption ?? (item.captions || {})[sub] ?? item.caption ?? '';
+            const alt = e.alt || `${item.menu} - ${caption || i + 1}`;
+            return {
+                src: encodeURI(item.folder ? `${item.folder}/${e.file}` : e.file),
+                alt: `taavi rekkaro - ${alt}`,
+                caption
+            };
+        });
+    }
+
+    function tryOtherCase(img) {
+        if (img.dataset.retried) return;
+        img.dataset.retried = '1';
+        img.src = img.src.replace(/\.(\w+)$/, (m, ext) =>
+            '.' + (ext === ext.toLowerCase() ? ext.toUpperCase() : ext.toLowerCase()));
+    }
+
+    function buildPage(item, group) {
+        const section = document.createElement('section');
+        section.id = `${item.id}-content`;
+        section.className = 'content-section';
+
+        if (item.type === 'time') {
+            section.innerHTML = `<h2 class="page-title spaced">${item.title || item.menu}</h2>
+                                 <div id="time-display">--:--:--.--</div>`;
+            return section;
+        }
+
+        let html = `<h2 class="page-title">${item.title || item.menu}</h2>`;
+        if (item.meta) html += `<div class="meta">${item.meta}</div>`;
+
+        const photos = photosOf(item);
+        if (photos.length) {
+            const hasCaptions = photos.some(p => p.caption);
+            html += `<div class="gallery${hasCaptions ? ' has-captions' : ''}">` + photos.map((p, i) => {
+                const media = p.youtube
+                    ? `<iframe class="embed" src="https://www.youtube-nocookie.com/embed/${p.youtube}?rel=0" title="${esc(p.alt)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`
+                    : /\.(mp4|webm|mov)$/i.test(p.src)
+                    ? `<video src="${p.src}#t=0.1" class="gallery-img" muted loop playsinline controls preload="metadata" aria-label="${esc(p.alt)}"></video>`
+                    : `<img src="${p.src}" alt="${esc(p.alt)}" class="gallery-img" decoding="async" onerror="tryOtherCase(this)"${eagerLeft-- > 0 ? '' : ' loading="lazy"'}>`;
+                return `<figure>${media}${p.caption ? `<figcaption>${p.caption}</figcaption>` : ''}</figure>`;
+            }).join('') + `</div>`;
+        }
+
+        if (item.text) {
+            const label = item.textLabel ?? group.textLabel;
+            html += `<div class="text-block">${label ? `<p class="label">${label}</p>` : ''}${item.text}</div>`;
+        }
+
+        section.innerHTML = html;
+        return section;
+    }
+
+    function buildOverview(group, visible) {
+        const section = document.createElement('section');
+        section.id = `${group.key}-content`;
+        section.className = 'content-section';
+        section.innerHTML = `<h2 class="page-title spaced">${group.label}</h2>
+            <div class="index">${visible.map(it => `<div><a href="#${it.id}">${it.menu}</a></div>`).join('')}</div>`;
+        return section;
+    }
+
+    const OLD_LINKS = { 'silent-scream': 'oslo-negativ-2025' };   // removed pages -> where they went
+
+    function buildSite() {
+        const nav = document.getElementById('nav');
+        const main = document.getElementById('content-area');
+        const about = document.getElementById('about-content');
+        let navHtml = '';
+        document.body.classList.toggle('one-page', ONE_PAGE);
+        if (ONE_PAGE) document.getElementById('home-content').remove();
+
+        GROUPS.forEach(group => {
+            const visible = group.items.filter(it => !it.draft);
+            // on the one long page, "exhibitions" etc. jump to the first page of that group
+            const groupHref = ONE_PAGE && visible.length ? visible[0].id : group.key;
+            if (ONE_PAGE && visible.length) OLD_LINKS[group.key] = visible[0].id;
+            navHtml += `<div class="nav-group">
+                <a href="#${groupHref}" id="nav-${group.key}" class="nav-link">${group.label}</a>
+                <ul class="nav-list">${visible.map(it =>
+                    `<li><a href="#${it.id}" id="link-${it.id}" class="nav-item">${it.menu}</a></li>`).join('')}
+                </ul></div>`;
+
+            if (!ONE_PAGE) main.insertBefore(buildOverview(group, visible), about);
+            ROUTES[group.key] = { group: group.key };
+            (ONE_PAGE ? visible : group.items).forEach(item => {
+                main.insertBefore(buildPage(item, group), about);
+                ROUTES[item.id] = { group: group.key, item: item.id, title: item.menu };
+            });
+        });
+
+        navHtml += `<div class="nav-group"><a href="#about" id="nav-about" class="nav-link">about</a></div>`;
+        ROUTES.about = { group: 'about' };
+        nav.innerHTML = navHtml;
+
+        // videos play (muted) only while they are on screen
+        const watcher = new IntersectionObserver(entries => entries.forEach(en => {
+            if (en.isIntersecting) en.target.play().catch(() => {});
+            else en.target.pause();
+        }), { threshold: 0.5 });
+        document.querySelectorAll('.gallery video').forEach(v => watcher.observe(v));
+
+        nav.addEventListener('click', e => {
+            if (e.target.closest('a') && window.innerWidth <= 768) closeMenu();
+        });
+
+        if (ONE_PAGE) {
+            // every #link on the page (menu, CV) glides to its place instead of reloading
+            document.addEventListener('click', e => {
+                const a = e.target.closest('a[href^="#"]');
+                if (!a) return;
+                e.preventDefault();
+                const id = resolve(a.getAttribute('href').slice(1));
+                history.replaceState(null, '', '#' + id);
+                scrollToPage(id, true);
+            });
+            watchScrolling();
+        }
+    }
+
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+    function closeMenu() { document.getElementById('sidebar').classList.remove('open'); }
+
+    function resolve(hash) {
+        hash = OLD_LINKS[hash] || hash;
+        return document.getElementById(`${hash}-content`) ? hash : 'home';
+    }
+
+    function markActive(id) {
+        document.querySelectorAll('.nav-link, .nav-item').forEach(l => l.classList.remove('active'));
+        const route = ROUTES[id] || {};
+        if (route.group) document.getElementById(`nav-${route.group}`)?.classList.add('active');
+        if (route.item) document.getElementById(`link-${route.item}`)?.classList.add('active');
+        document.title = route.title ? `${BASE_TITLE} - ${route.title}` : BASE_TITLE;
+    }
+
+    // space between the top of the screen and a page title
+    const topGap = () => (window.innerWidth <= 768 ? 72 : 48);
+
+    function scrollToPage(id, smooth) {
+        const title = document.querySelector(`#${id}-content .page-title`);
+        const y = title && id !== 'home' ? title.getBoundingClientRect().top + window.scrollY - topGap() : 0;
+        window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto' });
+        markActive(id);
+    }
+
+    // one long page: the menu follows along while scrolling
+    function watchScrolling() {
+        const spy = new IntersectionObserver(entries => entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            const id = en.target.id.replace(/-content$/, '');
+            markActive(id);
+            if (decodeURIComponent(location.hash.slice(1)) !== id) history.replaceState(null, '', '#' + id);
+        }), { rootMargin: '-35% 0px -60% 0px' });
+        document.querySelectorAll('.content-section').forEach(sec => { if (sec.id !== 'home-content') spy.observe(sec); });
+    }
+
+    function renderContent() {
+        let raw = decodeURIComponent(window.location.hash.slice(1));
+        const hash = resolve(raw || 'home');
+        if (raw && raw !== hash && hash !== 'home') history.replaceState(null, '', '#' + hash);
+
+        if (ONE_PAGE) {
+            fitGallery();
+            scrollToPage(hash, false);
+        } else {
+            document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+            document.getElementById(`${hash}-content`).style.display = 'block';
+            document.body.classList.toggle('is-home', hash === 'home');
+            markActive(hash);
+            window.scrollTo(0, 0);
+            fitGallery();
+        }
+        if (!raw && window.innerWidth <= 768) document.getElementById('sidebar').classList.add('open');
+    }
+
+    // make photos (and their captions) fill the screen below the title and info
+    function fitGallery() {
+        document.querySelectorAll('.gallery').forEach(g => {
+            if (!g.offsetParent || window.innerWidth <= 768) return;
+            const title = g.closest('.content-section').querySelector('.page-title');
+            const top = topGap() + g.getBoundingClientRect().top - title.getBoundingClientRect().top;
+            // space kept free under the photos, so the start of the text shows
+            const room = g.classList.contains('has-captions') ? 150 : 125;
+            g.style.setProperty('--img-h', Math.max(260, window.innerHeight - top - room) + 'px');
+        });
+    }
+
+    // ---------- big photo view: tap a photo to open it, tap beside it (or ×, Esc) to go back ----------
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    const lbCap = lb.querySelector('.lb-caption');
+    let lbList = [], lbIndex = 0, lbStart = 0;
+
+    function lbShow(i) {
+        lbIndex = (i + lbList.length) % lbList.length;
+        const img = lbList[lbIndex];
+        lbImg.src = img.currentSrc || img.src;
+        lbImg.alt = img.alt;
+        lbCap.textContent = img.closest('figure').querySelector('figcaption')?.textContent || '';
+        lb.querySelectorAll('.lb-prev, .lb-next').forEach(b => b.hidden = lbList.length < 2);
+    }
+    function lbOpen(img) {
+        lbList = [...img.closest('.gallery').querySelectorAll('img.gallery-img')];
+        lbStart = lbList.indexOf(img);
+        lbShow(lbStart);
+        lb.hidden = false;
+        document.documentElement.style.overflow = 'hidden';   // page underneath stays where it was
+    }
+    function lbClose() {
+        lb.hidden = true;
+        document.documentElement.style.overflow = '';
+        // if you moved to other photos, the gallery follows so that photo is in view
+        if (lbIndex !== lbStart) {
+            const fig = lbList[lbIndex].closest('figure'), g = fig.parentElement;
+            g.scrollTo({ left: fig.offsetLeft - g.offsetLeft, behavior: 'auto' });
+        }
+    }
+    document.addEventListener('click', e => {
+        const img = e.target.closest('.gallery img.gallery-img');
+        if (img) lbOpen(img);
+    });
+    lb.addEventListener('click', e => {
+        if (e.target.closest('.lb-prev')) return lbShow(lbIndex - 1);
+        if (e.target.closest('.lb-next')) return lbShow(lbIndex + 1);
+        if (e.target !== lbImg) lbClose();
+    });
+    document.addEventListener('keydown', e => {
+        if (lb.hidden) return;
+        if (e.key === 'Escape') lbClose();
+        if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+        if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
+    });
+    let touchX = null;
+    lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', e => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        touchX = null;
+        if (Math.abs(dx) > 50) lbShow(lbIndex + (dx < 0 ? 1 : -1));
+    });
+
+    function updateTimer() {
+        const el = document.getElementById('time-display');
+        if (!el) return;
+        const totalElapsedMs = Date.now() - START_TIME;
+        let totalSeconds = Math.floor(totalElapsedMs / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        totalSeconds %= 3600;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        const hundredths = Math.floor((totalElapsedMs % 1000) / 10);
+        el.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(hundredths).padStart(2, '0')}`;
+    }
+
+    document.getElementById('menu-button').addEventListener('click', toggleMenu);
+    document.getElementById('close-button').addEventListener('click', toggleMenu);
+    window.addEventListener('hashchange', renderContent);   // typed or shared links
+    window.addEventListener('resize', fitGallery);
+
+    buildSite();
+    renderContent();
+    updateTimer();
+    setInterval(updateTimer, 10);
+    </script>
+</body>
+</html>
